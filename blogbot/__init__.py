@@ -1,0 +1,2 @@
+"""Blog automation package."""
+

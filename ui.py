@@ -1,0 +1,314 @@
+from __future__ import annotations
+
+from dataclasses import asdict
+from datetime import date, datetime, time
+from io import BytesIO
+from types import SimpleNamespace
+from typing import Any
+
+import pandas as pd
+import streamlit as st
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.date import DateTrigger
+
+from blogbot.clients.openai_client import list_prompt_folders
+from blogbot.config import (
+    INLINE_OPENAI_API_KEY,
+    INLINE_PIXABAY_API_KEY,
+    INLINE_WP_APP_PASSWORD,
+    INLINE_WP_DOMAIN,
+    INLINE_WP_USER,
+    AppConfig,
+)
+from blogbot.workflows.publish import publish_post
+
+
+def build_config_from_inputs(
+    topic: str,
+    main_topic: str,
+    sub_topics: str,
+    prompt_folder: str,
+    image_count: int,
+    status: str,
+    model: str,
+    with_image: bool,
+    openai_api_key: str,
+    wp_domain: str,
+    wp_user: str,
+    wp_app_password: str,
+    pixabay_api_key: str,
+    submit_search: bool,
+    sitemap_url: str,
+) -> AppConfig:
+    args = SimpleNamespace(
+        topic=topic,
+        main_topic=main_topic,
+        sub_topics=sub_topics,
+        prompt_folder=prompt_folder,
+        image_count=image_count,
+        status=status,
+        model=model,
+        with_image=with_image,
+        openai_api_key=openai_api_key or None,
+        wp_domain=wp_domain or None,
+        wp_user=wp_user or None,
+        wp_app_password=wp_app_password or None,
+        pixabay_api_key=pixabay_api_key or None,
+        submit_search=submit_search,
+        sitemap_url=sitemap_url,
+    )
+    return AppConfig.from_args(args)
+
+
+def _job_publish(config_dict: dict[str, Any]) -> None:
+    config = AppConfig(**config_dict)
+    publish_post(config)
+
+
+@st.cache_resource
+def get_scheduler() -> BackgroundScheduler:
+    scheduler = BackgroundScheduler()
+    scheduler.start()
+    return scheduler
+
+
+def render_result(result: dict[str, str], with_image: bool, status: str) -> None:
+    st.success("Post published.")
+    st.write(f"Post ID: {result['post_id']}")
+    st.write(f"Title: {result['title']}")
+    st.write(f"SEO keyword: {result['seo_keyword']}")
+    st.write(f"References used: {result['reference_count']}")
+    st.link_button("Public link", result["public_url"])
+    st.link_button("Edit link", result["edit_url"])
+
+    if with_image:
+        if result.get("image_url"):
+            st.write(f"Images uploaded: {result['image_count_uploaded']}")
+            st.caption(result["image_url"])
+        else:
+            st.warning(f"Image not inserted: {result.get('image_status')}")
+            if result.get("image_message"):
+                st.caption(result["image_message"])
+
+    if result.get("search_submit"):
+        st.caption(f"Search submit: {result['search_submit']}")
+
+    if status != "publish":
+        st.info("Draft/private posts may not be visible on public URL.")
+
+
+def schedule_single_job(scheduler: BackgroundScheduler, config: AppConfig, run_at: datetime) -> str:
+    if run_at <= datetime.now():
+        raise ValueError("Scheduled time must be in the future.")
+
+    job_id = f"publish-{int(run_at.timestamp())}-{abs(hash(config.topic)) % 10000}"
+    scheduler.add_job(
+        _job_publish,
+        trigger=DateTrigger(run_date=run_at),
+        args=[asdict(config)],
+        id=job_id,
+        replace_existing=True,
+    )
+    return job_id
+
+
+def parse_bulk_schedule_excel(content: bytes, defaults: dict[str, str]) -> list[tuple[AppConfig, datetime]]:
+    df = pd.read_excel(BytesIO(content))
+    required_cols = {"topic", "run_at"}
+    missing = required_cols - set(df.columns)
+    if missing:
+        raise ValueError(f"Missing required columns: {', '.join(sorted(missing))}")
+
+    jobs: list[tuple[AppConfig, datetime]] = []
+    for _, row in df.iterrows():
+        topic = str(row.get("topic", "")).strip()
+        if not topic:
+            continue
+
+        run_at = pd.to_datetime(row.get("run_at")).to_pydatetime()
+        main_topic = str(row.get("main_topic", topic)).strip() or topic
+        sub_topics = str(row.get("sub_topics", "")).strip()
+        prompt_folder = str(row.get("prompt_folder", defaults["prompt_folder"])).strip() or defaults["prompt_folder"]
+        image_count = int(row.get("image_count", defaults["image_count"]))
+        status = str(row.get("status", defaults["status"])).strip() or defaults["status"]
+        model = str(row.get("model", defaults["model"])).strip() or defaults["model"]
+        with_image = str(row.get("with_image", defaults["with_image"])).strip().lower() in {"1", "true", "yes", "y"}
+        submit_search = str(row.get("submit_search", defaults["submit_search"])).strip().lower() in {"1", "true", "yes", "y"}
+        sitemap_url = str(row.get("sitemap_url", defaults["sitemap_url"])).strip()
+
+        config = build_config_from_inputs(
+            topic=topic,
+            main_topic=main_topic,
+            sub_topics=sub_topics,
+            prompt_folder=prompt_folder,
+            image_count=image_count,
+            status=status,
+            model=model,
+            with_image=with_image,
+            openai_api_key=defaults["openai_api_key"],
+            wp_domain=defaults["wp_domain"],
+            wp_user=defaults["wp_user"],
+            wp_app_password=defaults["wp_app_password"],
+            pixabay_api_key=defaults["pixabay_api_key"],
+            submit_search=submit_search,
+            sitemap_url=sitemap_url,
+        )
+        jobs.append((config, run_at))
+
+    return jobs
+
+
+def main() -> None:
+    st.set_page_config(page_title="Blog Publisher", page_icon="📝", layout="wide")
+    st.title("Blog Publisher UI")
+    st.caption("Now publish + schedule publish + bulk schedule by Excel")
+
+    scheduler = get_scheduler()
+    left, right = st.columns([2, 1])
+
+    with left:
+        topic = st.text_input("Topic", placeholder="e.g. 5-year-old weekend play ideas")
+        main_topic = st.text_input("Main topic", value="")
+        sub_topics = st.text_input("Sub topics (comma-separated)", value="")
+        prompt_folders = list_prompt_folders()
+        if not prompt_folders:
+            st.warning("No prompt folders found under blogbot/prompt/. Add a subfolder with .txt files.")
+        prompt_folder = st.selectbox(
+            "Prompt folder (글 작성 가이드)",
+            options=prompt_folders,
+            index=0 if prompt_folders else 0,
+        ) if prompt_folders else ""
+        image_count = st.slider("Image count", min_value=1, max_value=5, value=4)
+        status = st.selectbox("Post status", ["draft", "publish", "private"], index=0)
+        model = st.text_input("OpenAI model", value="gpt-4o-mini")
+        with_image = st.checkbox("Include Pixabay images", value=True)
+        submit_search = st.checkbox("Submit sitemap to search engines", value=False)
+        sitemap_url = st.text_input("Sitemap URL (optional)", value="")
+
+        with st.expander("Connection settings", expanded=False):
+            openai_api_key = st.text_input("OpenAI API Key", value=INLINE_OPENAI_API_KEY, type="password")
+            wp_domain = st.text_input("WordPress Domain", value=INLINE_WP_DOMAIN)
+            wp_user = st.text_input("WordPress User", value=INLINE_WP_USER)
+            wp_app_password = st.text_input("WordPress App Password", value=INLINE_WP_APP_PASSWORD, type="password")
+            pixabay_api_key = st.text_input("Pixabay API Key", value=INLINE_PIXABAY_API_KEY, type="password")
+
+        st.markdown("### Run now")
+        run_now = st.button("Publish now", type="primary")
+
+        st.markdown("### Schedule one")
+        run_date = st.date_input("Date", value=date.today())
+        run_time = st.time_input("Time", value=time(hour=9, minute=0))
+        schedule_one = st.button("Add schedule")
+
+        st.markdown("### Schedule bulk (Excel)")
+        st.caption("Required: topic, run_at | Optional: main_topic, sub_topics, prompt_folder, image_count, status, model, with_image, submit_search, sitemap_url")
+        uploaded_file = st.file_uploader("Upload .xlsx", type=["xlsx"])
+        schedule_bulk = st.button("Register bulk schedules")
+
+    with right:
+        st.subheader("Scheduled jobs")
+        jobs = scheduler.get_jobs()
+        if not jobs:
+            st.caption("No scheduled jobs.")
+        else:
+            for job in jobs:
+                st.write(f"- `{job.id}`")
+                st.caption(f"Next run: {job.next_run_time}")
+
+    defaults = {
+        "prompt_folder": prompt_folder,
+        "image_count": str(image_count),
+        "status": status,
+        "model": model.strip() or "gpt-4o-mini",
+        "with_image": str(with_image),
+        "submit_search": str(submit_search),
+        "sitemap_url": sitemap_url.strip(),
+        "openai_api_key": openai_api_key.strip(),
+        "wp_domain": wp_domain.strip(),
+        "wp_user": wp_user.strip(),
+        "wp_app_password": wp_app_password.strip(),
+        "pixabay_api_key": pixabay_api_key.strip(),
+    }
+
+    if run_now:
+        if not topic.strip():
+            st.error("Topic is required.")
+            return
+        if not prompt_folder:
+            st.error("Prompt folder is required.")
+            return
+        try:
+            config = build_config_from_inputs(
+                topic=topic.strip(),
+                main_topic=(main_topic.strip() or topic.strip()),
+                sub_topics=sub_topics.strip(),
+                prompt_folder=prompt_folder,
+                image_count=image_count,
+                status=defaults["status"],
+                model=defaults["model"],
+                with_image=with_image,
+                openai_api_key=defaults["openai_api_key"],
+                wp_domain=defaults["wp_domain"],
+                wp_user=defaults["wp_user"],
+                wp_app_password=defaults["wp_app_password"],
+                pixabay_api_key=defaults["pixabay_api_key"],
+                submit_search=submit_search,
+                sitemap_url=sitemap_url.strip(),
+            )
+            with st.spinner("Publishing..."):
+                result = publish_post(config)
+            render_result(result, with_image=config.with_image, status=config.status)
+        except Exception as exc:
+            st.error(f"Failed: {exc}")
+
+    if schedule_one:
+        if not topic.strip():
+            st.error("Topic is required.")
+            return
+        if not prompt_folder:
+            st.error("Prompt folder is required.")
+            return
+        try:
+            config = build_config_from_inputs(
+                topic=topic.strip(),
+                main_topic=(main_topic.strip() or topic.strip()),
+                sub_topics=sub_topics.strip(),
+                prompt_folder=prompt_folder,
+                image_count=image_count,
+                status=defaults["status"],
+                model=defaults["model"],
+                with_image=with_image,
+                openai_api_key=defaults["openai_api_key"],
+                wp_domain=defaults["wp_domain"],
+                wp_user=defaults["wp_user"],
+                wp_app_password=defaults["wp_app_password"],
+                pixabay_api_key=defaults["pixabay_api_key"],
+                submit_search=submit_search,
+                sitemap_url=sitemap_url.strip(),
+            )
+            run_at = datetime.combine(run_date, run_time)
+            job_id = schedule_single_job(scheduler, config, run_at)
+            st.success(f"Scheduled: {job_id} at {run_at}")
+        except Exception as exc:
+            st.error(f"Schedule failed: {exc}")
+
+    if schedule_bulk:
+        if uploaded_file is None:
+            st.error("Please upload an Excel file.")
+            return
+        try:
+            jobs = parse_bulk_schedule_excel(uploaded_file.read(), defaults)
+            if not jobs:
+                st.warning("No valid rows found in Excel.")
+                return
+            success_count = 0
+            for config, run_at in jobs:
+                schedule_single_job(scheduler, config, run_at)
+                success_count += 1
+            st.success(f"Bulk schedule registered: {success_count} jobs")
+        except Exception as exc:
+            st.error(f"Bulk schedule failed: {exc}")
+
+
+if __name__ == "__main__":
+    main()

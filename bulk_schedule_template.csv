@@ -1,0 +1,4 @@
+topic,run_at,main_topic,sub_topics,prompt_folder,image_count,status,model,with_image,submit_search,sitemap_url
+충북 충주시 공용주차장 위치 및 요금,2026-02-20 09:00:00,충북 충주시 공용주차장,"위치,요금,월주차 신청 방법",공용주차장,4,draft,gpt-4o-mini,true,false,
+서울 강남구 공영주차장 후기,2026-02-21 10:30:00,서울 강남구 공영주차장,"후기,장단점,혼잡 시간",공항주차장,3,publish,gpt-4o-mini,true,true,https://logofknowledge.com/sitemap_index.xml
+전기차 지원금 신청 방법,2026-02-22 08:45:00,전기차 지원금,"신청 방법,지원 금액,조건",전기차 지원금,2,draft,gpt-4o-mini,false,false,

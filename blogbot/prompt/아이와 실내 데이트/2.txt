@@ -1,0 +1,55 @@
+이 섹션에서는 아이와 함께 방문하기 좋은 실내 데이트 장소 5곳 중 1~3번을 소개합니다.
+
+각 장소별로 정보 카드를 채우고, 실내 시설 규모, 이용 요금, 연령별 추천 프로그램, 주차 편의시설 등을 구체적으로 설명해주세요.
+
+"내용 이름"에는 실제 장소 이름을 넣어주세요. https://a.a 링크는 네이버 검색 링크로 장소명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=장소이름 후기"
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>장소 이름 1</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">실내 시설 규모, 층별 구성, 놀이 공간 특징 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">장소 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>장소 이름 2</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이용 요금, 회원권·할인 정보, 연령별 추천 프로그램 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;">
+<a class="click-me-button" title="바로가기" href="https://a.a">장소 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>장소 이름 3</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주차 편의시설, 교통 접근성, 주변 식당·편의시설, 방문 시 유의사항 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">장소 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>

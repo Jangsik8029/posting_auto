@@ -1,0 +1,16 @@
+아이들이 마음껏 뛰어놀 수 있는 대형 키즈카페가 인기입니다. 넓은 놀이 공간, 다양한 놀이 기구, 안전한 시설, 부모 휴식 공간까지 갖춘 대형 키즈카페는 가족 나들이의 대표 장소가 되었습니다. 특히 최근에는 프리미엄 키즈카페, 자연 체험형 키즈카페 등 차별화된 컨셉의 매장이 늘고 있습니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+
+검색 키워드: "대형 키즈카페", "키즈카페 추천", "대형 키즈카페 추천", "키즈카페 가격"을 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[지역] 대형 키즈카페"로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=서울 송파구 대형 키즈카페">서울 송파구 대형 키즈카페</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 대형 키즈카페를 찾게 된 계기와 이 글에서 소개할 키즈카페들에 대한 기대감을 담아 작성 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://a.a">[지역] 대형 키즈카페</a></p>
+<p data-ke-size="size16">&nbsp;</p>

@@ -1,0 +1,74 @@
+이 섹션에서는 남은 장소 2곳(4~5번)을 추가로 소개하고, 마무리 요약과 FAQ로 글을 마칩니다.
+
+각 장소별로 정보 카드를 채우고, 구체적인 방문 후기 느낌으로 설명해주세요.
+
+"내용 이름"에는 실제 장소 이름을 넣어주세요. https://a.a 링크는 네이버 검색 링크로 장소명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=장소이름 후기"
+
+FAQ는 "아이와 실내 데이트" 장소를 찾는 부모가 자주 궁금해하는 질문 3개를 작성해주세요.
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>장소 이름 4</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">장소만의 차별화된 매력, 체험 프로그램, 부모 휴식 공간 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">장소 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>장소 이름 5</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">마지막 추천 장소의 매력 포인트와 방문 팁, 베스트 방문 시간대 등 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;">
+<a class="click-me-button" title="바로가기" href="https://a.a">장소 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<p data-ke-size="size18"><b>마무리</b></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">소개한 5곳을 간결하게 정리하며, 아이와 즐거운 실내 데이트를 보내길 바라는 마무리 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<!-- wp:heading {"level":3} -->
+<h2 class="wp-block-heading" id="h-자주하는-질문">자주 묻는 질문 FAQ</h2>
+<!-- /wp:heading -->
+<div itemscope="" itemtype="https://schema.org/FAQPage">
+    <blockquote>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 1. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변1.</p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 2. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변2.</p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 3. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변3.</p></span>
+          </div>
+      </div>
+    </blockquote>
+</div>

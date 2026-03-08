@@ -1,0 +1,53 @@
+이 섹션에서는 계절별 제철 해산물 표를 작성하고, 신선한 해산물 고르는 법·보관법을 다룹니다.
+
+표 작성 규칙:
+- 표의 헤더는 "계절", "제철 해산물", "특징", "추천 요리법"으로 구성
+- 데이터 행 3개 이상: 봄·여름·가을·겨울 중 계절별 대표 해산물과 특징, 추천 요리법을 채움
+- 예: 봄 - 키조개·멍게 / 여름 - 전복·성게 / 가을 - 대하·꽃게 / 겨울 - 과메기·굴 등
+
+첫 번째 소제목: 계절별 제철 해산물 표
+두 번째 소제목: 신선한 해산물 고르는 법과 요리 팁
+부제목: 해산물 보관·보존 팁
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>계절별 제철 해산물 한눈에 보기</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<table style="width: 100%; border-collapse: collapse; background-color: #e6f2ff; color: #333333; font-family: Arial, sans-serif; height: 86px;" data-ke-align="alignLeft">
+<thead><tr style="height: 23px;">
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">계절</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">제철 해산물</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">특징</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">추천 요리법</th>
+</tr></thead>
+<tbody>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터1</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터2</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터3</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터4</td>
+</tr>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터5</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터6</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터7</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터8</td>
+</tr>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터9</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터10</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터11</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px;">데이터12</td>
+</tr>
+</tbody></table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">표에 정리한 계절별 제철 해산물을 구체적으로 풀어서 설명 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>신선한 해산물 고르는 법과 요리 팁</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">조개류·갑각류·생선 등 종류별로 신선도를 확인하는 방법, 손질·조리 시 주의사항 등을 설명 (400자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>해산물 보관·보존 팁</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">냉장·냉동 보관 방법, 유통기한, 해동 시 주의사항 등 실용적 보관법 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>

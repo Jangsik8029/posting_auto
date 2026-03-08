@@ -1,0 +1,16 @@
+가족 여행을 계획할 때 아이와 함께 편하게 즐길 수 있는 리조트를 찾는 부모가 많습니다. 키즈풀, 키즈클럽, 가족룸 등 아이 맞춤 시설을 갖춘 리조트가 인기입니다. 대명리조트, 한화리조트, 소노벨, 클럽메드 등이 가족 단위로 인기가 높습니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+
+검색 키워드: "아이와 리조트", "가족 리조트 추천", "키즈 리조트", "국내 리조트 추천"을 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "아이와 가기 좋은 리조트 추천"으로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=아이와 가기 좋은 리조트 추천">아이와 가기 좋은 리조트 추천</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 아이와 함께 리조트 여행을 계획하게 된 계기와 이 글에서 소개할 리조트들에 대한 기대감을 담아 작성 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://a.a">아이와 가기 좋은 리조트 추천</a></p>
+<p data-ke-size="size16">&nbsp;</p>

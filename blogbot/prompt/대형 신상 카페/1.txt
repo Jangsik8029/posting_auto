@@ -1,0 +1,16 @@
+최근 전국 각지에 대형 신상 카페가 속속 오픈하고 있습니다. 넓은 공간, 감각적인 인테리어, 포토존, 디저트 메뉴까지 갖춘 카페들이 SNS에서 큰 화제를 모으고 있습니다. 특히 자연 속에 위치한 대형 카페, 루프탑 카페, 베이커리 카페 등 다양한 컨셉이 인기입니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+
+검색 키워드: "대형 카페", "신상 카페", "대형 카페 추천", "카페 추천"을 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[지역] 대형 신상 카페"로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=경기 성남시 대형 신상 카페">경기 성남시 대형 신상 카페</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 대형 신상 카페를 찾게 된 계기와 이 글에서 소개할 카페들에 대한 기대감을 담아 작성 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://a.a">[지역] 대형 신상 카페</a></p>
+<p data-ke-size="size16">&nbsp;</p>

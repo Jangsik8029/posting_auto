@@ -1,0 +1,55 @@
+이 섹션에서는 대형 신상 카페 5곳 중 1~3번을 소개합니다.
+
+각 카페별로 정보 카드를 채우고, 카페 규모, 대표 메뉴, 인테리어 특징, 포토존, 주차 가능 여부, 가격대 등을 구체적으로 설명해주세요.
+
+"내용 이름"에는 실제 카페 이름을 넣어주세요. https://a.a 링크는 네이버 검색 링크로 카페명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=카페이름 후기"
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>카페 이름 1</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">카페 규모, 층별 구성, 좌석 수·공간 활용 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">카페 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>카페 이름 2</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">대표 메뉴, 디저트·베이커리, 가격대, 인테리어 특징·포토존 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;">
+<a class="click-me-button" title="바로가기" href="https://a.a">카페 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>카페 이름 3</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주차 가능 여부, 교통 접근성, 베스트 방문 시간대, 방문 시 유의사항 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">카페 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>

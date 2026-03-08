@@ -48,6 +48,7 @@ class AppConfig:
     sitemap_url: str
     status: str
     with_image: bool
+    image_source: str  # "local" | "title" | "dalle" | "pixabay"
     knowledge_db_path: str
     knowledge_keyword: str
     collect_url: str
@@ -57,8 +58,13 @@ class AppConfig:
     def from_args(cls, args: object) -> "AppConfig":
         collect_only = bool(getattr(args, "collect_only", False))
         with_image = bool(getattr(args, "with_image"))
+
+        image_source = (getattr(args, "image_source", "local") or "local").strip().lower()
+        if image_source not in ("local", "title", "dalle", "pixabay"):
+            image_source = "local"
+
         pixabay_api_key = ""
-        if with_image and not collect_only:
+        if with_image and not collect_only and image_source == "pixabay":
             pixabay_api_key = pick_config(
                 getattr(args, "pixabay_api_key"),
                 INLINE_PIXABAY_API_KEY,
@@ -112,6 +118,7 @@ class AppConfig:
             sitemap_url=sitemap_url,
             status=getattr(args, "status"),
             with_image=with_image,
+            image_source=image_source,
             knowledge_db_path=knowledge_db_path,
             knowledge_keyword=knowledge_keyword,
             collect_url=collect_url,

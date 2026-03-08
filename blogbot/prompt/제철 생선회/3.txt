@@ -1,0 +1,63 @@
+이 섹션에서는 생선회 맛집 추천 지역, 가성비 좋은 곳 찾는 법, 주의사항을 다루고 마무리와 FAQ로 마칩니다.
+
+소제목 3: 생선회 맛집이 많은 추천 지역 (노량진, 기장, 제주, 목포, 통영 등)
+소제목 4: 합리적인 가격에 즐기는 방법 (수산시장 직접 구매, 포장회, 온라인 주문 등)
+소제목 5: 생선회 먹을 때 주의사항 (알레르기, 기생충, 임산부 주의 어종 등)
+
+FAQ는 제철 생선회에 대해 실제로 자주 궁금해하는 질문 3개를 작성해주세요.
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>생선회 맛집 추천 지역을 소개하는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">노량진, 기장, 제주, 목포, 통영 등 지역별 특색과 추천 이유 (500자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>추천 지역 1</li>
+<li>추천 지역 2</li>
+<li>추천 지역 3</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=생선회 맛집 추천">생선회 맛집 바로 찾기</a></p>
+<h2 data-ke-size="size26"><b>합리적인 가격에 생선회 즐기는 법을 다루는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">수산시장 직접 구매 팁, 포장회 추천, 온라인 직송 등 (500자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>생선회 먹을 때 주의사항을 다루는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">알레르기, 기생충 예방, 임산부 주의 어종 등 안전 정보 (500자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=제철 생선 달력">제철 생선 달력 확인</a></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size18"><b>마무리</b></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">제철 생선회의 매력과 핵심 정보를 간결하게 요약 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<!-- wp:heading {"level":3} -->
+<h2 class="wp-block-heading" id="h-자주하는-질문">자주 묻는 질문 FAQ</h2>
+<!-- /wp:heading -->
+
+<div itemscope="" itemtype="https://schema.org/FAQPage">
+    <blockquote>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 1. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변1.</p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 2. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변 2. </p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 3.</h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변3.</p></span>
+          </div>
+      </div>
+    </blockquote>
+</div>

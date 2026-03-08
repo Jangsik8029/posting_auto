@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from datetime import date, datetime, time
 from io import BytesIO
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
@@ -32,6 +33,7 @@ def build_config_from_inputs(
     status: str,
     model: str,
     with_image: bool,
+    image_source: str,
     openai_api_key: str,
     wp_domain: str,
     wp_user: str,
@@ -49,6 +51,7 @@ def build_config_from_inputs(
         status=status,
         model=model,
         with_image=with_image,
+        image_source=image_source,
         openai_api_key=openai_api_key or None,
         wp_domain=wp_domain or None,
         wp_user=wp_user or None,
@@ -112,8 +115,12 @@ def schedule_single_job(scheduler: BackgroundScheduler, config: AppConfig, run_a
     return job_id
 
 
-def parse_bulk_schedule_excel(content: bytes, defaults: dict[str, str]) -> list[tuple[AppConfig, datetime]]:
-    df = pd.read_excel(BytesIO(content))
+def parse_bulk_schedule(content: bytes, filename: str, defaults: dict[str, str]) -> list[tuple[AppConfig, datetime]]:
+    """벌크 스케줄용 CSV 또는 Excel 파일을 파싱한다."""
+    if filename.lower().endswith(".csv"):
+        df = pd.read_csv(BytesIO(content), encoding="utf-8")
+    else:
+        df = pd.read_excel(BytesIO(content))
     required_cols = {"topic", "run_at"}
     missing = required_cols - set(df.columns)
     if missing:
@@ -133,6 +140,7 @@ def parse_bulk_schedule_excel(content: bytes, defaults: dict[str, str]) -> list[
         status = str(row.get("status", defaults["status"])).strip() or defaults["status"]
         model = str(row.get("model", defaults["model"])).strip() or defaults["model"]
         with_image = str(row.get("with_image", defaults["with_image"])).strip().lower() in {"1", "true", "yes", "y"}
+        image_source = str(row.get("image_source", defaults["image_source"])).strip().lower() or defaults["image_source"]
         submit_search = str(row.get("submit_search", defaults["submit_search"])).strip().lower() in {"1", "true", "yes", "y"}
         sitemap_url = str(row.get("sitemap_url", defaults["sitemap_url"])).strip()
 
@@ -145,6 +153,7 @@ def parse_bulk_schedule_excel(content: bytes, defaults: dict[str, str]) -> list[
             status=status,
             model=model,
             with_image=with_image,
+            image_source=image_source,
             openai_api_key=defaults["openai_api_key"],
             wp_domain=defaults["wp_domain"],
             wp_user=defaults["wp_user"],
@@ -181,7 +190,20 @@ def main() -> None:
         image_count = st.slider("Image count", min_value=1, max_value=5, value=4)
         status = st.selectbox("Post status", ["draft", "publish", "private"], index=0)
         model = st.text_input("OpenAI model", value="gpt-4o-mini")
-        with_image = st.checkbox("Include Pixabay images", value=True)
+        with_image = st.checkbox("이미지 포함", value=True)
+        _source_labels = {
+            "local": "로컬 (프롬프트 폴더)",
+            "title": "제목 썸네일 (자동 생성, 무료)",
+            "dalle": "DALL-E (AI 생성, 유료)",
+            "pixabay": "Pixabay (스톡 검색)",
+        }
+        image_source = st.radio(
+            "이미지 소스",
+            options=["local", "title", "dalle", "pixabay"],
+            format_func=lambda x: _source_labels[x],
+            index=0,
+            horizontal=True,
+        )
         submit_search = st.checkbox("Submit sitemap to search engines", value=False)
         sitemap_url = st.text_input("Sitemap URL (optional)", value="")
 
@@ -200,9 +222,20 @@ def main() -> None:
         run_time = st.time_input("Time", value=time(hour=9, minute=0))
         schedule_one = st.button("Add schedule")
 
-        st.markdown("### Schedule bulk (Excel)")
-        st.caption("Required: topic, run_at | Optional: main_topic, sub_topics, prompt_folder, image_count, status, model, with_image, submit_search, sitemap_url")
-        uploaded_file = st.file_uploader("Upload .xlsx", type=["xlsx"])
+        st.markdown("### Schedule bulk (CSV / Excel)")
+        st.caption("필수: topic, run_at | 선택: main_topic, sub_topics, prompt_folder, image_count, status, model, with_image, image_source, submit_search, sitemap_url")
+        try:
+            template_path = Path(__file__).parent / "bulk_schedule_template.csv"
+            if template_path.exists():
+                st.download_button(
+                    "템플릿 CSV 다운로드",
+                    data=template_path.read_text(encoding="utf-8"),
+                    file_name="bulk_schedule_template.csv",
+                    mime="text/csv",
+                )
+        except Exception:
+            pass
+        uploaded_file = st.file_uploader("CSV 또는 Excel 업로드", type=["csv", "xlsx"])
         schedule_bulk = st.button("Register bulk schedules")
 
     with right:
@@ -221,6 +254,7 @@ def main() -> None:
         "status": status,
         "model": model.strip() or "gpt-4o-mini",
         "with_image": str(with_image),
+        "image_source": image_source,
         "submit_search": str(submit_search),
         "sitemap_url": sitemap_url.strip(),
         "openai_api_key": openai_api_key.strip(),
@@ -247,6 +281,7 @@ def main() -> None:
                 status=defaults["status"],
                 model=defaults["model"],
                 with_image=with_image,
+                image_source=defaults["image_source"],
                 openai_api_key=defaults["openai_api_key"],
                 wp_domain=defaults["wp_domain"],
                 wp_user=defaults["wp_user"],
@@ -278,6 +313,7 @@ def main() -> None:
                 status=defaults["status"],
                 model=defaults["model"],
                 with_image=with_image,
+                image_source=defaults["image_source"],
                 openai_api_key=defaults["openai_api_key"],
                 wp_domain=defaults["wp_domain"],
                 wp_user=defaults["wp_user"],
@@ -294,10 +330,10 @@ def main() -> None:
 
     if schedule_bulk:
         if uploaded_file is None:
-            st.error("Please upload an Excel file.")
+            st.error("CSV 또는 Excel 파일을 업로드해주세요.")
             return
         try:
-            jobs = parse_bulk_schedule_excel(uploaded_file.read(), defaults)
+            jobs = parse_bulk_schedule(uploaded_file.read(), uploaded_file.name, defaults)
             if not jobs:
                 st.warning("No valid rows found in Excel.")
                 return

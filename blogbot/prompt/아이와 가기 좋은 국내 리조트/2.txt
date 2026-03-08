@@ -1,0 +1,55 @@
+이 섹션에서는 아이와 함께 방문하기 좋은 국내 리조트 5곳 중 1~3번을 소개합니다.
+
+각 리조트별로 정보 카드를 채우고, 키즈 시설, 객실 타입, 요금대, 위치 접근성 등을 구체적으로 설명해주세요.
+
+"내용 이름"에는 실제 리조트 이름을 넣어주세요. https://a.a 링크는 네이버 검색 링크로 리조트명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=리조트이름 후기"
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>리조트 이름 1</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">키즈풀·워터파크 시설, 수영장 규모, 아이 이용 가능 연령, 이용 시간대 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">리조트 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>리조트 이름 2</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">가족룸·키즈클럽 시설, 객실 타입별 특징, 요금대, 예약 팁 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;">
+<a class="click-me-button" title="바로가기" href="https://a.a">리조트 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>리조트 이름 3</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주변 관광지 접근성, 교통편, 시즌별 추천 포인트, 가족 단위 방문 시 유의사항 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">리조트 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>

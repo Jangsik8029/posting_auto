@@ -1,5 +1,9 @@
-from blogbot.clients.openai_client import generate_article_with_chatgpt
+from pathlib import Path
+
+from blogbot.clients.dalle_client import generate_images_with_dalle, load_local_images, save_dalle_image_locally
+from blogbot.clients.openai_client import PROMPT_ROOT, generate_article_with_chatgpt
 from blogbot.clients.pixabay_client import download_images_with_pixabay, save_image_locally
+from blogbot.clients.thumbnail_gen import save_title_thumbnail
 from blogbot.clients.wordpress_client import (
     choose_public_url,
     post_to_wordpress,
@@ -41,6 +45,37 @@ def _inject_images_into_content(content_html: str, title: str, image_urls: list[
     return rebuilt
 
 
+def _upload_single_image(
+    config: AppConfig,
+    image_path: Path,
+    source_label: str,
+    image_urls: list[str],
+    image_sources: list[str],
+    attachment_ids: list[int],
+) -> str:
+    """이미지 한 장을 WP에 업로드하고 결과를 리스트에 추가한다. 에러 메시지를 반환."""
+    try:
+        media = upload_media_xmlrpc(
+            domain=config.wp_domain,
+            wp_user=config.wp_user,
+            wp_app_password=config.wp_app_password,
+            file_path=image_path,
+        )
+        wp_url = str(media.get("url", "")).strip()
+        if wp_url:
+            image_urls.append(wp_url)
+            image_sources.append(source_label)
+        if not attachment_ids:
+            aid = media.get("id")
+            if aid is not None:
+                attachment_ids.append(int(aid))
+    except RuntimeError as exc:
+        if "413" not in str(exc):
+            raise
+        return str(exc)
+    return ""
+
+
 def publish_post(config: AppConfig) -> dict[str, str]:
     references = collect_reference_material(config.main_topic, config.sub_topics, max_links=5)
     if config.knowledge_keyword:
@@ -67,42 +102,63 @@ def publish_post(config: AppConfig) -> dict[str, str]:
 
     image_urls: list[str] = []
     image_sources: list[str] = []
-    first_attachment_id: int | None = None
+    attachment_ids: list[int] = []
     image_status = "not_requested"
     image_message = ""
 
     if config.with_image:
         image_status = "requested"
         query = " ".join([config.main_topic, *config.sub_topics]).strip()
-        downloaded = download_images_with_pixabay(query, config.pixabay_api_key, count=config.image_count)
 
-        for i, (image_bytes, source_url) in enumerate(downloaded, start=1):
-            image_path = save_image_locally(image_bytes, query or config.topic, ext="jpg", index=i)
-            try:
-                media = upload_media_xmlrpc(
-                    domain=config.wp_domain,
-                    wp_user=config.wp_user,
-                    wp_app_password=config.wp_app_password,
-                    file_path=image_path,
+        if config.image_source == "local":
+            prompt_dir = PROMPT_ROOT / config.prompt_folder.strip()
+            local_paths = load_local_images(prompt_dir, count=config.image_count)
+            if not local_paths:
+                image_status = "upload_skipped"
+                image_message = "프롬프트 폴더에 이미지 파일이 없습니다."
+            else:
+                for image_path in local_paths:
+                    msg = _upload_single_image(config, image_path, f"local:{image_path.name}",
+                                               image_urls, image_sources, attachment_ids)
+                    if msg:
+                        image_message = msg
+
+        elif config.image_source == "title":
+            title_label = query or config.topic
+            for i in range(1, config.image_count + 1):
+                image_path = save_title_thumbnail(title_label, index=i)
+                msg = _upload_single_image(config, image_path, f"title-gen:{image_path.name}",
+                                           image_urls, image_sources, attachment_ids)
+                if msg:
+                    image_message = msg
+
+        else:
+            if config.image_source == "dalle":
+                downloaded = generate_images_with_dalle(
+                    topic=query or config.topic,
+                    api_key=config.openai_api_key,
+                    count=config.image_count,
                 )
-                image_url = str(media.get("url", "")).strip()
-                if image_url:
-                    image_urls.append(image_url)
-                    image_sources.append(source_url)
-                if first_attachment_id is None:
-                    aid = media.get("id")
-                    if aid is not None:
-                        first_attachment_id = int(aid) if isinstance(aid, str) else int(aid)
-            except RuntimeError as exc:
-                if "413" not in str(exc):
-                    raise
-                image_message = str(exc)
+            else:
+                downloaded = download_images_with_pixabay(query, config.pixabay_api_key, count=config.image_count)
+
+            for i, (image_bytes, source_url) in enumerate(downloaded, start=1):
+                if config.image_source == "dalle":
+                    image_path = save_dalle_image_locally(image_bytes, query or config.topic, index=i)
+                else:
+                    image_path = save_image_locally(image_bytes, query or config.topic, ext="jpg", index=i)
+                msg = _upload_single_image(config, image_path, source_url,
+                                           image_urls, image_sources, attachment_ids)
+                if msg:
+                    image_message = msg
 
         if image_urls:
             article.content_html = _inject_images_into_content(article.content_html, article.title, image_urls)
             image_status = "uploaded"
-        else:
+        elif image_status != "upload_skipped":
             image_status = "upload_skipped"
+
+    first_attachment_id = attachment_ids[0] if attachment_ids else None
 
     created = post_to_wordpress(
         domain=config.wp_domain,

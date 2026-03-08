@@ -1,0 +1,56 @@
+이 섹션에서는 주요 지역별 벚꽃 개화 예상일과 만개일을 표로 정리하고, 지역별 대표 벚꽃 명소를 소개합니다.
+
+표 작성 규칙:
+- 표의 헤더는 "지역", "개화 예상일", "만개 예상일", "대표 명소" 등으로 구성
+- 제주, 부산, 대구, 광주, 서울, 강원 등 주요 도시를 포함
+- 연도 기준 최신 예측 정보를 반영 (없으면 평년값 기준으로 작성)
+
+소제목은 "지역별 벚꽃 개화 시기"와 "놓치면 안 되는 벚꽃 명소 BEST" 등으로 작성해주세요.
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>지역별 벚꽃 개화·만개 시기를 비교하는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<table style="width: 100%; border-collapse: collapse; background-color: #e6f2ff; color: #333333; font-family: Arial, sans-serif; height: 86px;" data-ke-align="alignLeft">
+<thead>
+<tr style="height: 23px;">
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">지역</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">개화 예상일</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">만개 예상일</th>
+<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">대표 명소</th>
+</tr>
+</thead>
+<tbody>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터1</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터2</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터3</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터4</td>
+</tr>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터5</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터6</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터7</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터8</td>
+</tr>
+<tr style="height: 21px;">
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터9</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터10</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터11</td>
+<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">데이터12</td>
+</tr>
+</tbody>
+</table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">표를 바탕으로 남쪽→북쪽 개화 순서, 올해 특이사항 등을 풀어서 설명 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=벚꽃 명소 추천">전국 벚꽃 명소 확인하기</a></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>꼭 가봐야 할 벚꽃 명소를 소개하는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">여의도 윤중로, 진해 군항제, 경주 보문호, 하동 십리벚꽃길 등 대표 명소의 특징과 방문 팁 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>숨은 벚꽃 명소나 덜 붐비는 곳을 소개하는 부제목</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">인파를 피해 한적하게 벚꽃을 즐길 수 있는 숨은 명소 2~3곳 소개 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>

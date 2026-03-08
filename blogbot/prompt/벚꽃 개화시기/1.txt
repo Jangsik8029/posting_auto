@@ -1,0 +1,26 @@
+매년 봄이 되면 전국 각지에서 벚꽃이 피기 시작합니다. 벚꽃 개화 시기는 지역별, 연도별로 차이가 있으며, 기상청에서 매년 벚꽃 개화 예측일을 발표합니다.
+
+일반적으로 남쪽 지방(제주·부산·경남)부터 시작해 점차 북쪽(서울·경기·강원)으로 올라오는 패턴을 보입니다. 제주도는 보통 3월 중하순, 서울은 4월 초순에 개화하며, 만개까지는 개화 후 약 일주일이 소요됩니다.
+
+벚꽃 명소로는 여의도 윤중로, 진해 군항제, 경주 보문호, 하동 화개장터 등이 유명합니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+올해 벚꽃 구경 계획을 세우는 독자에게 이 글이 왜 유용한지 기대감을 담아 작성하세요.
+
+검색 키워드: "벚꽃 개화시기", "벚꽃 명소", "벚꽃 축제", "벚꽃 만개 시기"를 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[지역] 벚꽃 개화시기"로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=서울 벚꽃 개화시기">서울 벚꽃 개화시기 확인</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 봄이 오면 가장 기다려지는 벚꽃, 올해 개화 시기와 명소를 정리하게 된 이유 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16">
+  <a class="click-me-button" title="바로가기"
+     href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=벚꽃 개화시기">
+     올해 벚꽃 개화시기 확인하기
+  </a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>

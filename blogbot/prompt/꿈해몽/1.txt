@@ -1,0 +1,23 @@
+꿈해몽은 꿈의 내용을 해석해 길흉이나 앞날의 조언을 얻는 민간 전통에 가깝습니다. 꿈 종류에 따라 길몽(吉夢)과 흉몽(凶夢)으로 나뉘며, 흉몽으로 풀이되는 꿈을 꿨을 때는 조심해야 할 행동이나 물건을 피하는 등 참고하는 경우가 많습니다.
+
+이 글에서는 주제에 맞는 꿈의 종류, 길몽·흉몽 구분, 그리고 꿈해몽에서 말하는 주의사항(조심할 행동·물건)을 정리합니다. 단, 꿈해몽은 참고용이며 과학적 근거가 있는 것은 아님을 전제로 서술해주세요.
+
+위 배경을 바탕으로 글의 서론을 작성해주세요. 꿈을 꾼 뒤 해몽이 궁금한 독자에게 이 글이 왜 도움이 되는지 자연스럽게 이끌어주세요.
+
+검색 키워드: "꿈해몽", "길몽", "흉몽", "꿈 종류", "꿈 풀이"를 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[주제 키워드] 꿈해몽"으로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=돼지꿈 꿈해몽">돼지꿈 꿈해몽 더보기</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 꿈을 꾼 뒤 해몽이 궁금해진 독자에게 이 글이 다룰 내용(꿈 종류, 길몽·흉몽, 주의할 점)을 소개 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16">
+  <a class="click-me-button" title="바로가기"
+     href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=꿈해몽">
+     꿈해몽 더 알아보기
+  </a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>

@@ -1,0 +1,16 @@
+해산물은 생선회와 달리 조개류, 갑각류, 해조류 등 다양한 종류를 포함합니다. 봄에는 키조개·멍게, 여름에는 전복·성게, 가을에는 대하·꽃게, 겨울에는 과메기·굴이 대표적입니다. 계절마다 맛과 영양이 달라지는 제철 해산물을 알고 먹으면 더 신선하고 맛있게 즐길 수 있습니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+
+검색 키워드: "제철 해산물", "이달의 제철 해산물", "해산물 제철 시기", "해산물 맛집"을 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[월] 제철 해산물"로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=3월 제철 해산물">3월 제철 해산물 top1</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 제철 해산물에 관심을 갖게 된 계기와 이 글에서 소개할 계절별 해산물 정보에 대한 기대감을 담아 작성 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=이달의 제철 해산물">이달의 제철 해산물 top1</a></p>
+<p data-ke-size="size16">&nbsp;</p>

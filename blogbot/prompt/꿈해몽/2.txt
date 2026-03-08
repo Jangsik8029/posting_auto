@@ -1,0 +1,53 @@
+이 섹션에서는 주제에 해당하는 꿈의 종류, 길몽·흉몽 구분, 해몽 내용, 그리고 꿈해몽에서 말하는 "조심해야 할 행동이나 물건"을 정리합니다.
+
+작성 규칙:
+- 주제(예: 돼지꿈, 뱀꿈, 이빨 빠지는 꿈 등)에 맞는 꿈 종류를 구체적으로 소개
+- 같은 꿈이라도 상황·세부 내용에 따라 길몽/흉몽으로 나뉠 수 있음을 설명
+- 표에는 "꿈 종류(또는 상황)", "길몽/흉몽", "해몽 요약", "조심할 행동·물건" 등을 채움
+- 흉몽으로 풀이될 때 꿈해몽에서 흔히 말하는 주의사항(피하면 좋다는 행동, 물건, 기간 등)을 구체적으로 나열
+
+소제목은 "○○꿈의 종류와 길몽·흉몽", "○○꿈일 때 조심할 것" 등 주제에 맞게 작성해주세요.
+
+검색 키워드: "꿈해몽", "길몽", "흉몽", "꿈 풀이", "조심"을 본문에 자연스럽게 포함해주세요.
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>주제 꿈의 종류와 길몽·흉몽을 구분하는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주제에 해당하는 꿈의 여러 유형(예: 세부 상황별)을 소개하고, 어떤 경우에 길몽·흉몽으로 풀이되는지 설명 (400자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<table style="width: 100%; border-collapse: collapse; background-color: #f5f0e6; color: #333333; font-family: Arial, sans-serif;" data-ke-align="alignLeft">
+<thead>
+<tr style="height: 23px;">
+<th style="border: 1px solid #d4c4a0; padding: 10px;">꿈 종류 / 상황</th>
+<th style="border: 1px solid #d4c4a0; padding: 10px;">길몽/흉몽</th>
+<th style="border: 1px solid #d4c4a0; padding: 10px;">해몽 요약</th>
+<th style="border: 1px solid #d4c4a0; padding: 10px;">조심할 행동·물건</th>
+</tr>
+</thead>
+<tbody>
+<tr><td style="border: 1px solid #d4c4a0; padding: 10px;">내용1</td><td style="border: 1px solid #d4c4a0; padding: 10px;">길몽 또는 흉몽</td><td style="border: 1px solid #d4c4a0; padding: 10px;">해몽 요약</td><td style="border: 1px solid #d4c4a0; padding: 10px;">조심할 점</td></tr>
+<tr><td style="border: 1px solid #d4c4a0; padding: 10px;">내용2</td><td style="border: 1px solid #d4c4a0; padding: 10px;">길몽 또는 흉몽</td><td style="border: 1px solid #d4c4a0; padding: 10px;">해몽 요약</td><td style="border: 1px solid #d4c4a0; padding: 10px;">조심할 점</td></tr>
+<tr><td style="border: 1px solid #d4c4a0; padding: 10px;">내용3</td><td style="border: 1px solid #d4c4a0; padding: 10px;">길몽 또는 흉몽</td><td style="border: 1px solid #d4c4a0; padding: 10px;">해몽 요약</td><td style="border: 1px solid #d4c4a0; padding: 10px;">조심할 점</td></tr>
+</tbody>
+</table>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">표를 바탕으로 주제 꿈의 대표적인 해몽과 길흉 구분을 한두 문단으로 요약 (300자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=꿈해몽">꿈해몽 더보기</a></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>흉몽일 때 조심해야 할 행동·물건을 다루는 소제목</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">주제 꿈이 흉몽으로 풀이될 때 꿈해몽에서 흔히 말하는 주의사항: 피하거나 조심해야 하는 행동, 물건, 기간, 말실수 등 (400자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<ul style="list-style-type: disc;" data-ke-list-type="disc">
+<li>조심할 행동 또는 물건 1</li>
+<li>조심할 행동 또는 물건 2</li>
+<li>조심할 행동 또는 물건 3</li>
+<li>필요 시 4번째 항목</li>
+</ul>
+<p data-ke-size="size16">&nbsp;</p>
+<h3 data-ke-size="size23"><b>길몽일 때 참고할 점을 다루는 부제목</b></h3>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">길몽으로 풀이될 때 해몽에서 말하는 의미나 참고할 행동을 간단히 정리 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>

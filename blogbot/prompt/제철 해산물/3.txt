@@ -1,0 +1,59 @@
+이 섹션에서는 해산물 맛집 추천 지역, 온라인 주문 방법, 알레르기·식중독 주의사항을 다루고 마무리 요약과 FAQ로 글을 마칩니다.
+
+소제목 3: 해산물 맛집 추천 지역 (속초, 강릉, 통영, 여수, 제주 등 연안 도시별 대표 해산물과 맛집 분위기)
+소제목 4: 온라인으로 신선한 해산물 주문하는 방법 (직송 서비스, 주문 시 체크 포인트, 배송 보관 팁)
+소제목 5: 해산물 알레르기·식중독 주의사항 (갑각류 알레르기, 비브리오균, 생선회·회류 주의 등)
+
+버튼은 최대 2개만 사용해주세요. 예: 해산물 맛집 검색, 온라인 해산물 직송 주문 등
+
+FAQ는 제철 해산물에 대해 실제 사람들이 자주 궁금해하는 질문 3개를 작성해주세요.
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>해산물 맛집 추천 지역</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">속초, 강릉, 통영, 여수, 제주 등 연안 도시별 대표 제철 해산물과 맛집 분위기 소개 (500자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=해산물 맛집">해산물 맛집 한눈에 보기</a></p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>온라인으로 신선한 해산물 주문하는 방법</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">직송 서비스 특징, 주문 시 확인할 점, 배송 후 보관·보존 팁 (400자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>해산물 알레르기·식중독 주의사항</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">갑각류 알레르기, 비브리오균·식중독 예방, 생선회·회류 섭취 시 주의사항 (400자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=해산물 직송 주문">해산물 직송 주문 바로가기</a></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size18"><b>마무리</b></p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">계절별 제철 해산물 정보와 맛있게 즐기는 팁을 간결하게 정리하며 마무리 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<!-- wp:heading {"level":3} -->
+<h2 class="wp-block-heading" id="h-자주하는-질문">자주 묻는 질문 FAQ</h2>
+<!-- /wp:heading -->
+<div itemscope="" itemtype="https://schema.org/FAQPage">
+    <blockquote>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 1. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변1.</p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 2. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변2.</p></span>
+          </div>
+      </div>
+      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">
+          <h3 itemprop="name">질문 3. </h3>
+          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+              <span itemprop="text"><p>답변3.</p></span>
+          </div>
+      </div>
+    </blockquote>
+</div>

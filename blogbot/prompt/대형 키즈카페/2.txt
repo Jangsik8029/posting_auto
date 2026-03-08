@@ -1,0 +1,55 @@
+이 섹션에서는 대형 키즈카페 5곳 중 1~3번을 소개합니다.
+
+각 키즈카페별로 정보 카드를 채우고, 시설 규모(평수), 놀이 기구 종류, 이용 요금, 연령 제한, 부모 편의시설 등을 구체적으로 설명해주세요.
+
+"내용 이름"에는 실제 키즈카페 이름을 넣어주세요. https://a.a 링크는 네이버 검색 링크로 키즈카페명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=키즈카페이름 후기"
+
+--- HTML 템플릿 ---
+
+<h2 data-ke-size="size26"><b>키즈카페 이름 1</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">시설 규모(평수), 층별 구성, 놀이 공간 배치 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">키즈카페 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>키즈카페 이름 2</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">놀이 기구 종류, 슬라이드·볼풀·역할놀이존 등 구역별 특징, 이용 요금·연령 제한 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;">
+<a class="click-me-button" title="바로가기" href="https://a.a">키즈카페 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+
+<h2 data-ke-size="size26"><b>키즈카페 이름 3</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">부모 편의시설(휴식 공간, 카페 메뉴), 주차 가능 여부, 방문 시 유의사항 등 구체적으로 소개 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">키즈카페 이름 리뷰&정보 바로확인</a>
+<p data-ke-size="size16">&nbsp;</p>

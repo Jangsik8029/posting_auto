@@ -1,68 +1,54 @@
-1. 공영주차장이란? 공공이 운영하는 안전한 주차 공간
-공영주차장은 지방자치단체나 공공기관이 직접 운영하는 주차시설로, 주거지 또는 상업지구 인근에 설치되어 시민들이 합리적인 요금으로 이용할 수 있도록 돕습니다. 일반적으로 무인정산 시스템과 CCTV가 설치되어 있어 안전하고 효율적인 관리가 이루어지며, 가격도 민간 주차장에 비해 저렴한 편입니다.
+이 섹션에서는 해당 지역의 추천 공영주차장 5곳을 소개합니다.
 
-2. 월정기권으로 더욱 저렴하게 이용하기
-많은 공영주차장에서는 월정기권(월주차권)을 제공하여, 하루 단위 요금보다 훨씬 저렴하게 주차장을 이용할 수 있습니다. 특히 출퇴근 시 정기적으로 차량을 이용하는 경우, 월정기권은 비용 부담을 줄이고 공간 확보에도 유리합니다. 신청은 현장 사무소 또는 지자체 홈페이지에서 가능합니다.
+각 주차장별로 주소, 연락처, 평점, 리뷰 요약, 영업시간 정보를 정보 카드에 채워주세요.
+참고자료와 주제를 바탕으로 실제로 존재하는 공영주차장 이름을 사용하고, 요금 체계, 할인 혜택, 접근성 등을 구체적으로 설명해주세요.
+"내용 이름"에는 실제 주차장 이름을 넣어주세요.
+https://a.a 링크는 네이버 검색 링크로 주차장명을 검색하도록 작성해주세요.
+예시: href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=주차장이름 후기"
 
+--- HTML 템플릿 ---
 
-
-
-제목과 알려준 내용을 바탕으로 아래 서식을 이용하여 글을 작성해주세요. 
-
-1. 매우 중요합니다. HTML 구조 및 서식은 절대로 바꾸지말고 유지해주세요. GPT는 본문 내용만 작성해주세요.
-2. 제목과 관련된 핵심 내용은 필수로 작성해주시고 겹치지 않게 재작성해주세요.
-3. 내용은 적으라는 곳에만 글자수를 그 이상으로 작성해주세요. 내용 200자 내외에는 글의 서론 부분이니 200자 내외로만 딱 작성해주세요. 절대로 중요합니다.
-4. ```html, ``` 등 불필요한 내용은 제거해주세요.
-5. 글을 작성할때 요청한 외의 내용이 맨 마지막에 이런식으로 나와요. 이 내용을 바탕으로 ~에 대한 블로그 포스트를 작성했습니다. 핵심 정보를 유지하며 구조와 서식을 지정대로 유지했습니다. 필요한 정보와 링크도 포함되어 있습니다. 이런 이상한 내용은 싹 빼주세요.
-6. 절대로 중요합니다. 버튼은 html 서식으로 지정한곳 외에는 절대로 넣지말아주세요. 이 말은 즉슨, 버튼을 이 html 구조 외 추가로 생성해서 작성하지 말아주세요. 정말 최고로 중요합니다.
-7. 버튼의 <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=제목의 지역구 공영주차장">제목의 지역구 공영주차장 가격싼 곳 확인</a> 이 부분에는 아래의 예시처럼 작성해주세요.
-
-예시 : 서울 관악구 공영주차장이라면 <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=서울 관악구 공영주차장">서울 관악구 공영주차장 가격싼 곳 확인</a> 
-
-
-
-<h2 data-ke-size="size26"><b>제목과 관련된 소제목 1</b></h2>
+<h2 data-ke-size="size26"><b>주차장 이름 1</b></h2>
 <p data-ke-size="size16">&nbsp;</p>
-<table style="width: 100%; border-collapse: collapse; background-color: #e6f2ff; color: #333333; font-family: Arial, sans-serif; height: 86px;" data-ke-align="alignLeft">
-<thead>
-<tr style="height: 23px;">
-<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">내용1</th>
-<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">내용2</th>
-<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">내용3</th>
-<th style="border: 1px solid #b3d1ff; padding: 10px; height: 23px;">내용4</th>
-</tr>
-</thead>
-<tbody>
-<tr style="height: 21px;">
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성1</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성2</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성3</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성4</td>
-</tr>
-<tr style="height: 21px;">
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성5</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성6</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성7</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성8</td>
-</tr>
-<tr style="height: 21px;">
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성9</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성10</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성11</td>
-<td style="border: 1px solid #b3d1ff; padding: 10px; height: 21px; text-align: center;">구성12</td>
-</tr>
-</tbody>
-</table>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
 <p data-ke-size="size16">&nbsp;</p>
-<p data-ke-size="size16">내용 300자 내외 작성</p>
+<p data-ke-size="size16">이 주차장의 요금 체계, 할인 혜택, 주변 시설과의 접근성 등을 상세히 소개 (500자 이상)</p>
 <p data-ke-size="size16">&nbsp;</p>
-<p style="text-align: center;" data-ke-size="size16"><a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=제목의 지역구 공영주차장">제목의 지역구 공영주차장 가격싼 곳 확인</a></p>
+<a class="click-me-button" title="바로가기" href="https://a.a">주차장 이름 리뷰&정보 바로확인</a>
 <p data-ke-size="size16">&nbsp;</p>
-<h2 data-ke-size="size26"><b>제목과 관련된 소제목 2</b></h2>
+<h2 data-ke-size="size26"><b>주차장 이름 2</b></h2>
 <p data-ke-size="size16">&nbsp;</p>
-<p data-ke-size="size16">내용 200자 내외 작성</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
 <p data-ke-size="size16">&nbsp;</p>
-<h3 data-ke-size="size23"><b>제목과 관련된 부제목 2</b></h3>
+<p data-ke-size="size16">요금, 월정기권 가격, 주차 가능 대수, 무인정산 시스템 여부 등 실용 정보 (500자 이상)</p>
 <p data-ke-size="size16">&nbsp;</p>
-<p data-ke-size="size16">내용 300자 내외 작성</p>
+<p style="text-align: center;" data-ke-size="size16">
+<a class="click-me-button" title="바로가기" href="https://a.a">주차장 이름 리뷰&정보 바로확인</a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>
+<h2 data-ke-size="size26"><b>주차장 이름 3</b></h2>
+<p data-ke-size="size16">&nbsp;</p>
+<div style="border: 1px solid #ccc; background-color: #f5f5f5; padding: 15px; border-radius: 10px; line-height: 1.8; font-size: 15px;">
+  <b>📍 주소 : </b><br>
+  <b>📞 연락처 : </b><br>
+  <b>⭐ 평점 : </b><br>
+  <b>❤️ 리뷰 : </b>
+  <b>🕠 영업시간 : </b>
+</div>
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">이 주차장의 차별화된 장점과 이용 시 알아두면 좋은 팁 (500자 이상)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<a class="click-me-button" title="바로가기" href="https://a.a">주차장 이름 리뷰&정보 바로확인</a>
 <p data-ke-size="size16">&nbsp;</p>

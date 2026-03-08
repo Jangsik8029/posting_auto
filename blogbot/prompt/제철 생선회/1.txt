@@ -1,0 +1,24 @@
+한국은 삼면이 바다로 둘러싸여 사계절 내내 다양한 생선회를 즐길 수 있습니다. 생선은 계절에 따라 지방이 오르고 맛이 달라지기 때문에, 제철에 먹는 생선회가 가장 신선하고 맛있습니다.
+
+봄에는 도다리·주꾸미, 여름에는 민어·농어, 가을에는 전어·갈치, 겨울에는 방어·광어가 대표적인 제철 생선입니다. 같은 생선이라도 제철에 먹으면 식감과 풍미가 확연히 다릅니다.
+
+위 배경 정보를 바탕으로, 글의 서론 부분을 작성해주세요.
+제철 생선회에 대한 관심을 끌고, 이 글에서 어떤 정보를 얻을 수 있는지 기대감을 담아 작성하세요.
+
+검색 키워드: "제철 생선회", "제철 회", "이달의 제철 생선", "생선회 맛집"을 본문에 자연스럽게 포함해주세요.
+
+버튼의 href query에는 "[월] 제철 생선회" 또는 "[생선이름] 맛집"으로 작성해주세요.
+예시: <a class="click-me-button" title="바로가기" href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=이번달 제철 생선회">이번달 제철 생선회 확인</a>
+
+--- HTML 템플릿 ---
+
+<p data-ke-size="size16">&nbsp;</p>
+<p data-ke-size="size16">서론: 제철 생선회를 찾게 된 이유와 이 글에서 다룰 핵심 내용 안내 (200자 내외)</p>
+<p data-ke-size="size16">&nbsp;</p>
+<p style="text-align: center;" data-ke-size="size16">
+  <a class="click-me-button" title="바로가기"
+     href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=이번달 제철 생선회">
+     이번달 제철 생선회 확인하기
+  </a>
+</p>
+<p data-ke-size="size16">&nbsp;</p>

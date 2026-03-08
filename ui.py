@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+import os
 from dataclasses import asdict
 from datetime import date, datetime, time
 from io import BytesIO
@@ -22,6 +24,25 @@ from blogbot.config import (
     AppConfig,
 )
 from blogbot.workflows.publish import publish_post
+
+# UI 입력 저장 파일 (프로젝트 루트, .gitignore 대상)
+SETTINGS_PATH = Path(__file__).resolve().parent / ".posting_auto_ui_settings.json"
+
+
+def load_ui_settings() -> dict[str, Any]:
+    """저장된 UI 설정을 읽는다. 없거나 오류면 빈 dict."""
+    if not SETTINGS_PATH.exists():
+        return {}
+    try:
+        return json.loads(SETTINGS_PATH.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def save_ui_settings(data: dict[str, Any]) -> None:
+    """현재 UI 입력값을 파일에 저장한다."""
+    SETTINGS_PATH.parent.mkdir(parents=True, exist_ok=True)
+    SETTINGS_PATH.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def build_config_from_inputs(
@@ -172,47 +193,86 @@ def main() -> None:
     st.title("Blog Publisher UI")
     st.caption("Now publish + schedule publish + bulk schedule by Excel")
 
+    saved = load_ui_settings()
+    _opt = lambda key, default: saved.get(key, default)
+
     scheduler = get_scheduler()
     left, right = st.columns([2, 1])
 
     with left:
-        topic = st.text_input("Topic", placeholder="e.g. 5-year-old weekend play ideas")
-        main_topic = st.text_input("Main topic", value="")
-        sub_topics = st.text_input("Sub topics (comma-separated)", value="")
+        topic = st.text_input("Topic", placeholder="e.g. 5-year-old weekend play ideas", value=_opt("topic", ""))
+        main_topic = st.text_input("Main topic", value=_opt("main_topic", ""))
+        sub_topics = st.text_input("Sub topics (comma-separated)", value=_opt("sub_topics", ""))
         prompt_folders = list_prompt_folders()
         if not prompt_folders:
             st.warning("No prompt folders found under blogbot/prompt/. Add a subfolder with .txt files.")
+        pf_saved = _opt("prompt_folder", "")
+        pf_index = prompt_folders.index(pf_saved) if prompt_folders and pf_saved in prompt_folders else 0
         prompt_folder = st.selectbox(
             "Prompt folder (글 작성 가이드)",
             options=prompt_folders,
-            index=0 if prompt_folders else 0,
+            index=pf_index,
         ) if prompt_folders else ""
-        image_count = st.slider("Image count", min_value=1, max_value=5, value=4)
-        status = st.selectbox("Post status", ["draft", "publish", "private"], index=0)
-        model = st.text_input("OpenAI model", value="gpt-4o-mini")
-        with_image = st.checkbox("이미지 포함", value=True)
+        try:
+            _ic = int(_opt("image_count", 4))
+        except (TypeError, ValueError):
+            _ic = 4
+        image_count = st.slider("Image count", min_value=1, max_value=5, value=min(max(_ic, 1), 5))
+        status_options = ["draft", "publish", "private"]
+        status_index = status_options.index(_opt("status", "draft")) if _opt("status", "draft") in status_options else 0
+        status = st.selectbox("Post status", status_options, index=status_index)
+        model = st.text_input("OpenAI model", value=_opt("model", "gpt-4o-mini"))
+        with_image = st.checkbox("이미지 포함", value=_opt("with_image", True) if isinstance(_opt("with_image", True), bool) else str(_opt("with_image", "true")).lower() in ("true", "1", "yes"))
         _source_labels = {
             "local": "로컬 (프롬프트 폴더)",
             "title": "제목 썸네일 (자동 생성, 무료)",
             "dalle": "DALL-E (AI 생성, 유료)",
             "pixabay": "Pixabay (스톡 검색)",
         }
+        image_source_options = ["local", "title", "dalle", "pixabay"]
+        is_saved = _opt("image_source", "local")
+        is_index = image_source_options.index(is_saved) if is_saved in image_source_options else 0
         image_source = st.radio(
             "이미지 소스",
-            options=["local", "title", "dalle", "pixabay"],
+            options=image_source_options,
             format_func=lambda x: _source_labels[x],
-            index=0,
+            index=is_index,
             horizontal=True,
         )
-        submit_search = st.checkbox("Submit sitemap to search engines", value=False)
-        sitemap_url = st.text_input("Sitemap URL (optional)", value="")
+        submit_search_val = _opt("submit_search", False)
+        if isinstance(submit_search_val, bool):
+            submit_search = st.checkbox("Submit sitemap to search engines", value=submit_search_val)
+        else:
+            submit_search = st.checkbox("Submit sitemap to search engines", value=str(submit_search_val).lower() in ("true", "1", "yes"))
+        sitemap_url = st.text_input("Sitemap URL (optional)", value=_opt("sitemap_url", ""))
 
         with st.expander("Connection settings", expanded=False):
-            openai_api_key = st.text_input("OpenAI API Key", value=INLINE_OPENAI_API_KEY, type="password")
-            wp_domain = st.text_input("WordPress Domain", value=INLINE_WP_DOMAIN)
-            wp_user = st.text_input("WordPress User", value=INLINE_WP_USER)
-            wp_app_password = st.text_input("WordPress App Password", value=INLINE_WP_APP_PASSWORD, type="password")
-            pixabay_api_key = st.text_input("Pixabay API Key", value=INLINE_PIXABAY_API_KEY, type="password")
+            openai_default = _opt("openai_api_key", "") or os.environ.get("OPENAI_API_KEY", "") or INLINE_OPENAI_API_KEY
+            openai_api_key = st.text_input("OpenAI API Key", value=openai_default, type="password")
+            wp_domain = st.text_input("WordPress Domain", value=_opt("wp_domain", INLINE_WP_DOMAIN))
+            wp_user = st.text_input("WordPress User", value=_opt("wp_user", INLINE_WP_USER))
+            wp_app_password = st.text_input("WordPress App Password", value=_opt("wp_app_password", INLINE_WP_APP_PASSWORD), type="password")
+            pixabay_api_key = st.text_input("Pixabay API Key", value=_opt("pixabay_api_key", INLINE_PIXABAY_API_KEY), type="password")
+            if st.button("현재 설정 저장 (다음부터 자동 불러옴)"):
+                save_ui_settings({
+                    "topic": topic,
+                    "main_topic": main_topic,
+                    "sub_topics": sub_topics,
+                    "prompt_folder": prompt_folder,
+                    "image_count": image_count,
+                    "status": status,
+                    "model": model,
+                    "with_image": with_image,
+                    "image_source": image_source,
+                    "submit_search": submit_search,
+                    "sitemap_url": sitemap_url,
+                    "openai_api_key": openai_api_key,
+                    "wp_domain": wp_domain,
+                    "wp_user": wp_user,
+                    "wp_app_password": wp_app_password,
+                    "pixabay_api_key": pixabay_api_key,
+                })
+                st.success("저장되었습니다. 다음 실행부터 자동으로 불러옵니다.")
 
         st.markdown("### Run now")
         run_now = st.button("Publish now", type="primary")

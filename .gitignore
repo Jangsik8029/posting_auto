@@ -1,0 +1,24 @@
+# API 키·비밀 (GitHub에 올리지 않음)
+.env
+.env.local
+*.local.py
+secrets.*
+.posting_auto_ui_settings.json
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+*.swp
+
+# 프로젝트
+downloads/

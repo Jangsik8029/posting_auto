@@ -4,7 +4,8 @@ import os
 from blogbot.utils import normalize_domain
 
 
-# Keep empty by default. Fill these only if you intentionally want inline secrets.
+# API 키·비밀은 GitHub에 올리지 말고, 환경 변수 또는 UI 입력으로 설정하세요.
+# OPENAI_API_KEY 는 반드시 환경 변수 또는 UI에서 입력 (인라인 값 사용 안 함)
 INLINE_OPENAI_API_KEY = ""
 INLINE_WP_DOMAIN = "logofknowledge.com"
 INLINE_WP_USER = "jangsik0044"

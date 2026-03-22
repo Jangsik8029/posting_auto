@@ -18,11 +18,15 @@ from blogbot.models import Article
 
 
 def _inject_images_into_content(content_html: str, title: str, image_urls: list[str]) -> str:
+    """이미지를 본문에 삽입. alt는 네이버 SEO를 위해 제목·순서 기반 설명으로 설정."""
     if not image_urls:
         return content_html
 
+    def _alt(i: int) -> str:
+        return f"{title} 대표 이미지" if i == 0 else f"{title} 관련 이미지 {i + 1}"
+
     if "<h2" not in content_html:
-        blocks = [f'<p><img src="{u}" alt="{title}" /></p>' for u in image_urls]
+        blocks = [f'<p><img src="{u}" alt="{_alt(i)}" /></p>' for i, u in enumerate(image_urls)]
         return "\n".join(blocks) + "\n" + content_html
 
     parts = content_html.split("<h2")
@@ -30,17 +34,17 @@ def _inject_images_into_content(content_html: str, title: str, image_urls: list[
     image_idx = 0
 
     if image_idx < len(image_urls):
-        rebuilt = f'<p><img src="{image_urls[image_idx]}" alt="{title}" /></p>\n' + rebuilt
+        rebuilt = f'<p><img src="{image_urls[image_idx]}" alt="{_alt(image_idx)}" /></p>\n' + rebuilt
         image_idx += 1
 
     for p in parts[1:]:
         if image_idx < len(image_urls):
-            rebuilt += f'\n<p><img src="{image_urls[image_idx]}" alt="{title}" /></p>\n'
+            rebuilt += f'\n<p><img src="{image_urls[image_idx]}" alt="{_alt(image_idx)}" /></p>\n'
             image_idx += 1
         rebuilt += "<h2" + p
 
     while image_idx < len(image_urls):
-        rebuilt += f'\n<p><img src="{image_urls[image_idx]}" alt="{title}" /></p>\n'
+        rebuilt += f'\n<p><img src="{image_urls[image_idx]}" alt="{_alt(image_idx)}" /></p>\n'
         image_idx += 1
     return rebuilt
 

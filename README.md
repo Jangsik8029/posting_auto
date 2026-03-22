@@ -34,3 +34,14 @@ python3 -m venv .venv
 ```bash
 .venv/bin/streamlit run ui.py
 ```
+
+## 기존 워드프레스 글 네이버 SEO 재적용
+
+이미 발행된 글에 네이버 검색 가이드(title·meta description 길이, H1→H2, 이미지 alt)를 적용해 수정할 수 있습니다.
+
+- **UI:** Connection settings 아래 "기존 글 네이버 SEO 재적용"에서 WordPress 글 ID 입력 후 **네이버 SEO 재적용** 버튼 클릭.
+- **CLI:** `--reoptimize-post-id` 로 글 ID 지정. (WP 계정은 환경 변수 또는 인자로 설정)
+
+```bash
+.venv/bin/python main.py --reoptimize-post-id 123
+```

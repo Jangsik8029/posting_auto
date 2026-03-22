@@ -270,6 +270,71 @@ def post_to_wordpress(
     return response.json()
 
 
+def get_post_from_wordpress(
+    domain: str,
+    wp_user: str,
+    wp_app_password: str,
+    post_id: int,
+) -> Article:
+    """워드프레스에서 글 한 건을 가져와 Article로 반환한다."""
+    url = build_wp_api_endpoint(domain, f"wp/v2/posts/{post_id}")
+    auth = (wp_user, sanitize_app_password(wp_app_password))
+    headers = {
+        "User-Agent": "python-requests/wordpress-autowriter",
+        "Accept": "application/json",
+    }
+    resp = requests.get(url, auth=auth, headers=headers, timeout=20)
+    if resp.status_code != 200:
+        raise RuntimeError(f"WordPress get post failed ({resp.status_code}): {resp.text[:300]}")
+    data = resp.json()
+    title = (data.get("title") or {}).get("rendered", "") or ""
+    if isinstance(title, str):
+        title = __strip_html(title).strip()
+    content = (data.get("content") or {}).get("rendered", "") or ""
+    excerpt = (data.get("excerpt") or {}).get("rendered", "") or ""
+    if isinstance(excerpt, str):
+        excerpt = __strip_html(excerpt).strip()
+    return Article(
+        title=title,
+        excerpt=excerpt,
+        content_html=content,
+        seo_keyword=title,
+    )
+
+
+def __strip_html(text: str) -> str:
+    import html
+    import re
+    s = re.sub(r"<[^>]+>", "", text).strip()
+    return html.unescape(s)
+
+
+def update_post_on_wordpress(
+    domain: str,
+    wp_user: str,
+    wp_app_password: str,
+    post_id: int,
+    article: Article,
+) -> dict[str, Any]:
+    """워드프레스 글을 수정한다 (title, content, excerpt)."""
+    url = build_wp_api_endpoint(domain, f"wp/v2/posts/{post_id}")
+    auth = (wp_user, sanitize_app_password(wp_app_password))
+    headers = {
+        "User-Agent": "python-requests/wordpress-autowriter",
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    payload = {
+        "title": article.title,
+        "content": article.content_html,
+        "excerpt": article.excerpt,
+    }
+    resp = requests.patch(url, auth=auth, headers=headers, json=payload, timeout=30)
+    if resp.status_code not in (200, 204):
+        raise RuntimeError(f"WordPress update post failed ({resp.status_code}): {resp.text[:300]}")
+    return resp.json() if resp.text else {"id": post_id}
+
+
 def choose_public_url(domain: str, created: dict[str, Any]) -> tuple[str, str]:
     normalized_domain = normalize_domain(domain)
     post_id = created.get("id")

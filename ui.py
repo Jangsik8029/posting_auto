@@ -24,6 +24,7 @@ from blogbot.config import (
     AppConfig,
 )
 from blogbot.workflows.publish import publish_post
+from blogbot.workflows.rewrite_seo import reoptimize_post_naver_seo
 
 # UI 입력 저장 파일 (프로젝트 루트, .gitignore 대상)
 SETTINGS_PATH = Path(__file__).resolve().parent / ".posting_auto_ui_settings.json"
@@ -298,6 +299,11 @@ def main() -> None:
         uploaded_file = st.file_uploader("CSV 또는 Excel 업로드", type=["csv", "xlsx"])
         schedule_bulk = st.button("Register bulk schedules")
 
+        st.markdown("### 기존 글 네이버 SEO 재적용")
+        st.caption("워드프레스 글 ID를 입력하면 제목·요약 길이, H1→H2, 이미지 alt를 네이버 가이드에 맞게 보정 후 저장합니다.")
+        reopt_post_id = st.number_input("WordPress 글 ID", min_value=1, value=1, step=1, key="reopt_post_id")
+        reoptimize_click = st.button("네이버 SEO 재적용")
+
     with right:
         st.subheader("Scheduled jobs")
         jobs = scheduler.get_jobs()
@@ -404,6 +410,21 @@ def main() -> None:
             st.success(f"Bulk schedule registered: {success_count} jobs")
         except Exception as exc:
             st.error(f"Bulk schedule failed: {exc}")
+
+    if reoptimize_click:
+        try:
+            result = reoptimize_post_naver_seo(
+                domain=defaults["wp_domain"],
+                wp_user=defaults["wp_user"],
+                wp_app_password=defaults["wp_app_password"],
+                post_id=int(reopt_post_id),
+            )
+            st.success("네이버 SEO 재적용 완료.")
+            st.write(f"글 ID: {result['post_id']}")
+            st.write(f"제목: {result['title']}")
+            st.caption(f"요약 미리보기: {result['excerpt_preview']}")
+        except Exception as exc:
+            st.error(f"재적용 실패: {exc}")
 
 
 if __name__ == "__main__":

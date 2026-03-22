@@ -59,7 +59,13 @@ COMMON_WRITING_RULES = """## 페르소나
 ## SEO 규칙
 - 프롬프트에서 제시한 검색 키워드를 본문 전체에 자연스럽게 분산 배치
 - 소제목(h2, h3)을 활용해 가독성과 검색 최적화를 동시에 확보
-- 글 말미에 핵심 내용을 간결하게 요약"""
+- 글 말미에 핵심 내용을 간결하게 요약
+
+## 네이버 검색엔진 최적화(SEO) 규칙
+- **title(제목)**: 페이지 주제를 나타내는 정확하고 고유한 제목. 한 글당 하나의 제목만, 25~55자 내외(한글 기준). 너무 길지 않게 작성.
+- **excerpt(요약)**: meta description으로 사용됨. 검색 결과 스니펫에 노출되므로, 페이지 내용을 2~3문장으로 고유하게 요약. 120~155자 내외. 다른 글과 동일한 문구 사용 금지.
+- **본문 HTML 구조**: 본문에는 <h1>을 사용하지 말고 <h2>, <h3>만 사용. (사이트가 글 제목을 H1으로 노출하므로, 본문에 H1이 있으면 H1이 2개 이상 되어 검색로봇에 불리함.)
+- **이미지**: 본문에 img를 넣을 경우 반드시 alt 속성에 해당 이미지 내용을 설명하는 텍스트를 넣기. alt 누락 시 검색로봇이 이미지를 해석하기 어려움."""
 
 
 def _build_first_system_prompt() -> str:
@@ -67,7 +73,9 @@ def _build_first_system_prompt() -> str:
         f"{COMMON_WRITING_RULES}\n\n"
         "## 출력 형식\n"
         "반드시 유효한 JSON만 반환. 키: title, excerpt, content_html, seo_keyword\n"
-        "content_html은 유효한 HTML이어야 함 (글의 첫 번째 섹션)."
+        "- title: 이 글만의 고유·정확한 제목 1개, 25~55자 내외(한글).\n"
+        "- excerpt: meta description용, 검색 스니펫에 쓰일 고유 요약 2~3문장, 120~155자 내외.\n"
+        "- content_html: 유효한 HTML(첫 번째 섹션). 본문에는 h2, h3만 사용하고 h1은 사용하지 않기. img 사용 시 반드시 alt 속성 포함."
     )
 
 
@@ -76,7 +84,8 @@ def _build_continuation_system_prompt() -> str:
         f"{COMMON_WRITING_RULES}\n\n"
         "## 추가 규칙 (이어쓰기)\n"
         "- 이전 섹션의 내용을 반복하지 않고, 자연스럽게 이어서 작성\n"
-        "- 톤과 문체를 이전 섹션과 일관되게 유지\n\n"
+        "- 톤과 문체를 이전 섹션과 일관되게 유지\n"
+        "- content_html에는 h2, h3만 사용(h1 사용 금지). img 사용 시 반드시 alt 속성 포함\n\n"
         "## 출력 형식\n"
         "반드시 유효한 JSON만 반환. 키: content_html (이어붙일 HTML 섹션)"
     )
@@ -293,9 +302,19 @@ def generate_article_with_chatgpt(
     if not excerpt:
         excerpt = title
 
+    # 네이버 SEO: 본문에 H1이 있으면 H1 중복이 되므로 본문은 H2/H3만 사용
+    content_html = "\n".join(content_parts)
+    content_html = content_html.replace("<h1 ", "<h2 ").replace("</h1>", "</h2>")
+
+    # 네이버 SEO 권장: title 25~55자, meta description 120~155자
+    if len(title) > 55:
+        title = title[:54] + "…" if len(title) > 54 else title
+    if len(excerpt) > 155:
+        excerpt = excerpt[:154] + "…" if len(excerpt) > 154 else excerpt
+
     return Article(
         title=title,
         excerpt=excerpt,
-        content_html="\n".join(content_parts),
+        content_html=content_html,
         seo_keyword=seo_keyword,
     )

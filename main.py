@@ -6,6 +6,7 @@ from blogbot.config import AppConfig
 from blogbot.integrations.knowledge_collector import collect_from_site
 from blogbot.integrations.knowledge_db import upsert_knowledge_items
 from blogbot.workflows.publish import publish_post
+from blogbot.workflows.rewrite_seo import reoptimize_post_naver_seo
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,12 +45,34 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--wp-app-password", help="WordPress app password (optional if WP_APP_PASSWORD is set)")
     parser.add_argument("--with-image", action="store_true", help="Download/upload Pixabay image and embed in content")
     parser.add_argument("--pixabay-api-key", help="Pixabay API key (optional if PIXABAY_API_KEY is set)")
+    parser.add_argument(
+        "--reoptimize-post-id",
+        type=int,
+        metavar="ID",
+        help="Re-apply Naver SEO rules to an existing WordPress post (fetch → rewrite title/excerpt/H1/alt → update). Requires WP credentials.",
+    )
     return parser.parse_args()
 
 
 def main() -> None:
     args = parse_args()
     config = AppConfig.from_args(args)
+
+    reoptimize_id = getattr(args, "reoptimize_post_id", None)
+    if reoptimize_id is not None:
+        print(f"Re-optimizing WordPress post ID {reoptimize_id} for Naver SEO...")
+        result = reoptimize_post_naver_seo(
+            domain=config.wp_domain,
+            wp_user=config.wp_user,
+            wp_app_password=config.wp_app_password,
+            post_id=reoptimize_id,
+        )
+        print("Post updated for Naver SEO.")
+        print(f"Post ID: {result['post_id']}")
+        print(f"Title: {result['title']}")
+        print(f"Excerpt preview: {result['excerpt_preview']}")
+        return
+
     if config.collect_url:
         print(f"Collecting site data: {config.collect_url}")
         collected = collect_from_site(config.collect_url, max_pages=10)

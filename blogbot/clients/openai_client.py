@@ -6,8 +6,9 @@ from pathlib import Path
 import pandas as pd
 import requests
 
+from blogbot.clients.http import TIMEOUT_LONG, get_shared_session
 from blogbot.models import Article
-from blogbot.utils import extract_json_object
+from blogbot.utils import extract_json_object, retry_with_backoff, truncate_with_ellipsis
 
 logger = logging.getLogger(__name__)
 
@@ -182,6 +183,16 @@ def _get_ordered_txt_files(prompt_dir: Path) -> list[Path]:
     )
 
 
+@retry_with_backoff(max_attempts=3)
+def _post_chatgpt(payload: dict, headers: dict) -> requests.Response:
+    return get_shared_session().post(
+        OPENAI_API_URL,
+        headers=headers,
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        timeout=TIMEOUT_LONG,
+    )
+
+
 def _call_chatgpt(
     messages: list[dict[str, str]],
     api_key: str,
@@ -197,14 +208,13 @@ def _call_chatgpt(
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
-    response = requests.post(
-        OPENAI_API_URL,
-        headers=headers,
-        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
-        timeout=120,
-    )
+    response = _post_chatgpt(payload, headers)
     if response.status_code != 200:
-        raise RuntimeError(f"OpenAI API failed ({response.status_code}): {response.text[:300]}")
+        logger.debug("OpenAI response body: %s", response.text)
+        raise RuntimeError(
+            f"OpenAI API failed ({response.status_code}): "
+            f"{truncate_with_ellipsis(response.text, 300)}"
+        )
     data = response.json()
     try:
         return data["choices"][0]["message"]["content"]
@@ -307,10 +317,8 @@ def generate_article_with_chatgpt(
     content_html = content_html.replace("<h1 ", "<h2 ").replace("</h1>", "</h2>")
 
     # 네이버 SEO 권장: title 25~55자, meta description 120~155자
-    if len(title) > 55:
-        title = title[:54] + "…" if len(title) > 54 else title
-    if len(excerpt) > 155:
-        excerpt = excerpt[:154] + "…" if len(excerpt) > 154 else excerpt
+    title = truncate_with_ellipsis(title, 55)
+    excerpt = truncate_with_ellipsis(excerpt, 155)
 
     return Article(
         title=title,

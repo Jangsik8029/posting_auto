@@ -1,11 +1,16 @@
 from __future__ import annotations
 
+import logging
 import re
 from dataclasses import dataclass
 from html import unescape
 from urllib.parse import urljoin, urlparse
 
 import requests
+
+from blogbot.clients.http import TIMEOUT_DEFAULT, get_shared_session
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -86,12 +91,11 @@ def _extract_links(base_url: str, html: str, max_links: int = 20) -> list[str]:
     return links
 
 
-def _fetch(url: str, timeout: int = 20) -> tuple[str, str]:
-    resp = requests.get(
+def _fetch(url: str, timeout: int = TIMEOUT_DEFAULT) -> tuple[str, str]:
+    resp = get_shared_session().get(
         url,
         timeout=timeout,
         headers={
-            "User-Agent": "Mozilla/5.0",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.7,en;q=0.5",
         },
@@ -123,7 +127,8 @@ def collect_from_site(
     for link in _extract_links(site_url, html, max_links=max_pages):
         try:
             sub_html, sub_ctype = _fetch(link)
-        except requests.RequestException:
+        except requests.RequestException as exc:
+            logger.warning("Knowledge collector: failed to fetch %s (%s)", link, exc)
             continue
         if "text/html" not in sub_ctype and "<html" not in sub_html.lower():
             continue

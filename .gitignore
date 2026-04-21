@@ -22,3 +22,14 @@ build/
 
 # 프로젝트
 downloads/
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# 테스트/커버리지
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/

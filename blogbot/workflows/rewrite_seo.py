@@ -2,7 +2,8 @@
 import re
 
 from blogbot.clients.wordpress_client import get_post_from_wordpress, update_post_on_wordpress
-from blogbot.models import Article
+from blogbot.models import Article, ReoptimizeResult
+from blogbot.utils import truncate_with_ellipsis
 
 
 def reoptimize_post_naver_seo(
@@ -12,18 +13,18 @@ def reoptimize_post_naver_seo(
     post_id: int,
     title_max: int = 55,
     excerpt_max: int = 155,
-) -> dict[str, str]:
+) -> ReoptimizeResult:
     """
     워드프레스 글 한 건을 가져와 네이버 SEO 보정 후 다시 저장한다.
     반환: post_id, title, excerpt_preview, status 등.
     """
     article = get_post_from_wordpress(domain, wp_user, wp_app_password, post_id)
     rewritten = rewrite_article_for_naver_seo(article, title_max=title_max, excerpt_max=excerpt_max)
-    result = update_post_on_wordpress(domain, wp_user, wp_app_password, post_id, rewritten)
+    update_post_on_wordpress(domain, wp_user, wp_app_password, post_id, rewritten)
     return {
         "post_id": str(post_id),
         "title": rewritten.title,
-        "excerpt_preview": (rewritten.excerpt[:60] + "…") if len(rewritten.excerpt) > 60 else rewritten.excerpt,
+        "excerpt_preview": truncate_with_ellipsis(rewritten.excerpt, 60),
         "status": "updated",
     }
 
@@ -40,10 +41,8 @@ def rewrite_article_for_naver_seo(article: Article, title_max: int = 55, excerpt
     excerpt = article.excerpt.strip()
     content = article.content_html
 
-    if len(title) > title_max:
-        title = (title[: title_max - 1] + "…") if title_max > 1 else title[:title_max]
-    if len(excerpt) > excerpt_max:
-        excerpt = (excerpt[: excerpt_max - 1] + "…") if excerpt_max > 1 else excerpt[:excerpt_max]
+    title = truncate_with_ellipsis(title, title_max)
+    excerpt = truncate_with_ellipsis(excerpt, excerpt_max)
 
     content = content.replace("<h1 ", "<h2 ").replace("</h1>", "</h2>")
 

@@ -1,0 +1,39 @@
+[project]
+name = "posting-auto"
+version = "0.1.0"
+description = "Korean SEO blog auto-publisher for WordPress."
+requires-python = ">=3.12"
+
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = [
+    ".venv",
+    "downloads",
+    "data",
+    "__pycache__",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = [
+    "E501",  # 줄 길이는 포매터에 맡긴다
+    "B008",  # streamlit/FastAPI 스타일에서 인자 기본값으로 함수 호출이 관용적
+    "UP007", # 파이썬 3.12에서도 Optional[X] 허용
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = false
+ignore_missing_imports = true
+check_untyped_defs = true
+warn_unused_ignores = true
+exclude = '(^|/)(\.venv|downloads|data|tests)/'
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+addopts = "-q --strict-markers"

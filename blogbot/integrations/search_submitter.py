@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import logging
 from urllib.parse import quote_plus
 
 import requests
+
+logger = logging.getLogger(__name__)
 
 
 def submit_post_to_search_sites(post_url: str, sitemap_url: str = "") -> dict[str, str]:
@@ -26,15 +29,17 @@ def submit_post_to_search_sites(post_url: str, sitemap_url: str = "") -> dict[st
 
     try:
         g = requests.get(google_ping, timeout=15)
-        result["google"] = str(g.status_code)
-    except Exception as exc:
-        result["google"] = f"error:{exc}"
+        result["google"] = str(g.status_code) if 200 <= g.status_code < 300 else f"http_{g.status_code}"
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException) as exc:
+        logger.warning("Google ping failed for sitemap %s: %s", sitemap_url, exc)
+        result["google"] = f"error:{type(exc).__name__}"
 
     try:
         b = requests.get(bing_ping, timeout=15)
-        result["bing"] = str(b.status_code)
-    except Exception as exc:
-        result["bing"] = f"error:{exc}"
+        result["bing"] = str(b.status_code) if 200 <= b.status_code < 300 else f"http_{b.status_code}"
+    except (requests.Timeout, requests.ConnectionError, requests.RequestException) as exc:
+        logger.warning("Bing ping failed for sitemap %s: %s", sitemap_url, exc)
+        result["bing"] = f"error:{type(exc).__name__}"
 
     return result
 

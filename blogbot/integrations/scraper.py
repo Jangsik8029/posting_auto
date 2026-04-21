@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+import logging
 import re
 from urllib.parse import parse_qs, quote_plus, urlparse
 
 import requests
 import xml.etree.ElementTree as ET
+
+from blogbot.clients.http import TIMEOUT_DEFAULT, get_shared_session
+
+logger = logging.getLogger(__name__)
 
 
 def _clean_ddg_redirect(url: str) -> str:
@@ -19,14 +24,15 @@ def collect_reference_material(main_topic: str, sub_topics: list[str], max_links
     if not query:
         return []
 
+    session = get_shared_session()
     search_url = f"https://duckduckgo.com/html/?q={quote_plus(query)}"
-    response = requests.get(
-        search_url,
-        headers={"User-Agent": "Mozilla/5.0"},
-        timeout=20,
-    )
+    try:
+        response = session.get(search_url, timeout=TIMEOUT_DEFAULT)
+    except requests.RequestException as exc:
+        logger.warning("DuckDuckGo search failed for %r: %s", query, exc)
+        response = None
     refs: list[dict[str, str]] = []
-    if response.status_code == 200:
+    if response is not None and response.status_code == 200:
         html = response.text
         pattern = re.compile(
             r'<a[^>]*class="result__a"[^>]*href="([^"]+)"[^>]*>(.*?)</a>',
@@ -45,12 +51,18 @@ def collect_reference_material(main_topic: str, sub_topics: list[str], max_links
 
     # Fallback: Bing RSS
     rss_url = f"https://www.bing.com/search?q={quote_plus(query)}&format=rss"
-    rss_resp = requests.get(rss_url, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
+    try:
+        rss_resp = session.get(rss_url, timeout=TIMEOUT_DEFAULT)
+    except requests.RequestException as exc:
+        logger.warning("Bing RSS fetch failed for %r: %s", query, exc)
+        return refs
     if rss_resp.status_code != 200:
+        logger.info("Bing RSS returned HTTP %s for %r", rss_resp.status_code, query)
         return refs
     try:
         root = ET.fromstring(rss_resp.text)
-    except ET.ParseError:
+    except ET.ParseError as exc:
+        logger.warning("Bing RSS parse failed for query %r: %s", query, exc)
         return refs
 
     seen = {x["url"] for x in refs}

@@ -1,8 +1,12 @@
+import logging
 from pathlib import Path
 
 import requests
 
-from blogbot.utils import safe_ascii_filename
+from blogbot.clients.http import TIMEOUT_LONG, get_shared_session
+from blogbot.utils import download_bytes, ensure_downloads_dir, retry_with_backoff, safe_ascii_filename, truncate_with_ellipsis
+
+logger = logging.getLogger(__name__)
 
 OPENAI_IMAGES_URL = "https://api.openai.com/v1/images/generations"
 IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp")
@@ -17,6 +21,13 @@ TOPIC_PROMPT_TEMPLATE = (
 
 def _build_image_prompt(topic: str) -> str:
     return TOPIC_PROMPT_TEMPLATE.format(topic=topic)
+
+
+@retry_with_backoff(max_attempts=3)
+def _post_generate(headers: dict, payload: dict) -> requests.Response:
+    return get_shared_session().post(
+        OPENAI_IMAGES_URL, headers=headers, json=payload, timeout=TIMEOUT_LONG
+    )
 
 
 def generate_images_with_dalle(
@@ -42,19 +53,28 @@ def generate_images_with_dalle(
             "size": size,
             "quality": quality,
         }
-        resp = requests.post(OPENAI_IMAGES_URL, headers=headers, json=payload, timeout=120)
+        resp = _post_generate(headers, payload)
         if resp.status_code != 200:
-            raise RuntimeError(f"DALL-E image generation failed ({resp.status_code}): {resp.text[:500]}")
+            logger.debug("DALL-E response body: %s", resp.text)
+            raise RuntimeError(
+                f"DALL-E image generation failed ({resp.status_code}): "
+                f"{truncate_with_ellipsis(resp.text, 500)}"
+            )
 
         data = resp.json()
-        image_url = data["data"][0].get("url", "")
+        try:
+            image_url = (data["data"][0] or {}).get("url", "")
+        except (IndexError, KeyError, TypeError):
+            logger.warning("DALL-E response missing data[0].url: %s", data)
+            continue
         if not image_url:
             continue
 
-        img_resp = requests.get(image_url, timeout=60)
-        if img_resp.status_code != 200:
+        image_bytes = download_bytes(image_url, timeout=60, session=get_shared_session())
+        if image_bytes is None:
+            logger.warning("DALL-E image download failed for %s", image_url)
             continue
-        collected.append((img_resp.content, image_url))
+        collected.append((image_bytes, image_url))
 
     if not collected:
         raise RuntimeError("DALL-E image generation produced no usable images.")
@@ -62,8 +82,7 @@ def generate_images_with_dalle(
 
 
 def save_dalle_image_locally(image_bytes: bytes, topic: str, index: int = 1) -> Path:
-    out_dir = Path("downloads")
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = ensure_downloads_dir()
     out_path = out_dir / f"{safe_ascii_filename(topic)}-dalle-{index}.png"
     out_path.write_bytes(image_bytes)
     return out_path

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/python.exe -m pytest -q)",
+      "Bash(.venv/Scripts/pip.exe install *)",
+      "Bash(.venv/Scripts/python.exe -c \"import requests; print\\(requests.__version__\\)\")",
+      "Bash(.venv/Scripts/python.exe -m pytest)",
+      "Bash(.venv/Scripts/python.exe -c \"import streamlit, apscheduler; print\\('ok'\\)\")",
+      "Bash(.venv/Scripts/python.exe -c \"import streamlit, apscheduler\")",
+      "Bash(.venv/Scripts/python.exe -m streamlit run ui.py --server.headless true --server.port 8501)",
+      "Bash(git rev-list *)",
+      "Bash(git add *)"
+    ]
+  }
+}

@@ -1,9 +1,10 @@
 from pathlib import Path
+import os
 import textwrap
 
 from PIL import Image, ImageDraw, ImageFont
 
-from blogbot.utils import safe_ascii_filename
+from blogbot.utils import ensure_downloads_dir, safe_ascii_filename
 
 FONT_CANDIDATES = [
     "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
@@ -34,7 +35,7 @@ def _find_font(size: int) -> ImageFont.FreeTypeFont:
     return ImageFont.load_default()
 
 
-def _draw_gradient(draw: ImageDraw.ImageDraw, color_a: tuple, color_b: tuple) -> None:
+def _draw_gradient(draw: ImageDraw.ImageDraw, color_a: tuple[int, int, int], color_b: tuple[int, int, int]) -> None:
     for y in range(HEIGHT):
         ratio = y / HEIGHT
         r = int(color_a[0] + (color_b[0] - color_a[0]) * ratio)
@@ -95,7 +96,7 @@ def generate_title_thumbnail(title: str, index: int = 0) -> Image.Image:
         draw.text((x, y), line, font=font, fill=(255, 255, 255))
 
     sub_font = _find_font(24)
-    sub_text = "logofknowledge.com"
+    sub_text = os.getenv("THUMBNAIL_WATERMARK", "logofknowledge.com")
     sb = draw.textbbox((0, 0), sub_text, font=sub_font)
     sw = sb[2] - sb[0]
     draw.text(
@@ -111,8 +112,7 @@ def generate_title_thumbnail(title: str, index: int = 0) -> Image.Image:
 def save_title_thumbnail(title: str, index: int = 1) -> Path:
     """썸네일을 생성하고 로컬에 저장한 뒤 경로를 반환한다."""
     img = generate_title_thumbnail(title, index=index)
-    out_dir = Path("downloads")
-    out_dir.mkdir(parents=True, exist_ok=True)
+    out_dir = ensure_downloads_dir()
     out_path = out_dir / f"{safe_ascii_filename(title)}-thumb-{index}.png"
     img.save(out_path, "PNG")
     return out_path

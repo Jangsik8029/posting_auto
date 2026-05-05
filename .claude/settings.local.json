@@ -9,7 +9,13 @@
       "Bash(.venv/Scripts/python.exe -c \"import streamlit, apscheduler\")",
       "Bash(.venv/Scripts/python.exe -m streamlit run ui.py --server.headless true --server.port 8501)",
       "Bash(git rev-list *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(git -C C:/Users/A13176/PJS/project/posting_auto rev-list --left-right --count origin/main...HEAD)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)",
+      "Bash(cmd.exe *)",
+      "Bash(git check-ignore *)"
     ]
   }
 }

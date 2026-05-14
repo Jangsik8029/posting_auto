@@ -222,6 +222,162 @@ def _call_chatgpt(
         raise RuntimeError(f"Unexpected OpenAI response shape: {data}") from exc
 
 
+AUTO_PROMPT_SECTIONS = [
+    (
+        "서론",
+        "이 글의 주제를 소개하고 독자가 왜 이 글을 읽어야 하는지 설명하는 서론을 작성해주세요.\n"
+        "검색 키워드를 본문에 자연스럽게 포함해주세요.\n"
+        "버튼의 href query에는 주제를 네이버 검색으로 연결해주세요.\n"
+        "예시: <a class=\"click-me-button\" title=\"바로가기\" "
+        'href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=주제">주제 자세히 알아보기</a>\n\n'
+        "--- HTML 템플릿 ---\n\n"
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p data-ke-size="size16">서론: 주제 소개와 이 글에서 다룰 내용 안내 (300자 내외)</p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p style="text-align: center;" data-ke-size="size16">'
+        '<a class="click-me-button" title="바로가기" '
+        'href="https://search.naver.com/search.naver?where=nexearch&amp;sm=top_hty&amp;fbm=0&amp;ie=utf8&amp;query=주제">주제 자세히 알아보기</a></p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n',
+    ),
+    (
+        "본론",
+        "주제에 대한 핵심 정보를 3~4개 소제목으로 나누어 상세하게 설명해주세요.\n"
+        "각 소제목에서 구체적인 정보, 팁, 비교, 장단점 등을 포함해주세요.\n"
+        "실제로 도움이 되는 실용적인 내용을 위주로 작성해주세요.\n\n"
+        "--- HTML 템플릿 ---\n\n"
+        '<h2 data-ke-size="size26"><b>소제목 1</b></h2>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p data-ke-size="size16">핵심 정보 1에 대한 상세 설명 (500자 이상)</p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<h2 data-ke-size="size26"><b>소제목 2</b></h2>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p data-ke-size="size16">핵심 정보 2에 대한 상세 설명 (500자 이상)</p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<h2 data-ke-size="size26"><b>소제목 3</b></h2>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p data-ke-size="size16">핵심 정보 3에 대한 상세 설명 (500자 이상)</p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n',
+    ),
+    (
+        "결론 & FAQ",
+        "마무리 요약과 자주 묻는 질문(FAQ) 3개를 작성해주세요.\n"
+        "FAQ는 독자들이 실제로 궁금해할만한 질문으로 작성하고, Schema.org FAQPage 마크업을 사용하세요.\n\n"
+        "--- HTML 템플릿 ---\n\n"
+        '<h2 data-ke-size="size26"><b>마무리</b></h2>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n'
+        '<p data-ke-size="size16">핵심 내용 요약 및 마무리 멘트 (200자 내외)</p>\n'
+        '<p data-ke-size="size16">&nbsp;</p>\n\n'
+        '<!-- wp:heading {"level":3} -->\n'
+        '<h2 class="wp-block-heading" id="h-자주하는-질문">자주 묻는 질문 FAQ</h2>\n'
+        "<!-- /wp:heading -->\n\n"
+        '<div itemscope="" itemtype="https://schema.org/FAQPage">\n'
+        "    <blockquote>\n"
+        '      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">\n'
+        '          <h3 itemprop="name">질문 1. </h3>\n'
+        '          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">\n'
+        '              <span itemprop="text"><p>답변1.</p></span>\n'
+        "          </div>\n"
+        "      </div>\n"
+        '      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">\n'
+        '          <h3 itemprop="name">질문 2. </h3>\n'
+        '          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">\n'
+        '              <span itemprop="text"><p>답변 2.</p></span>\n'
+        "          </div>\n"
+        "      </div>\n"
+        '      <div itemscope="" itemprop="mainEntity" itemtype="https://schema.org/Question">\n'
+        '          <h3 itemprop="name">질문 3.</h3>\n'
+        '          <div itemscope="" itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">\n'
+        '              <span itemprop="text"><p>답변3.</p></span>\n'
+        "          </div>\n"
+        "      </div>\n"
+        "    </blockquote>\n"
+        "</div>\n",
+    ),
+]
+
+
+def generate_article_auto(
+    main_topic: str,
+    sub_topics: list[str],
+    references: list[dict[str, str]],
+    api_key: str,
+    model: str,
+) -> Article:
+    """프롬프트 폴더 없이 토픽만으로 자동 글 생성. 자동 발행 파이프라인용."""
+    sub_topics_text = ", ".join(sub_topics) if sub_topics else "(none)"
+    refs_text = _format_refs(references)
+    title = ""
+    excerpt = ""
+    seo_keyword = main_topic
+    content_parts: list[str] = []
+
+    for i, (section_name, prompt_text) in enumerate(AUTO_PROMPT_SECTIONS):
+        is_first = len(content_parts) == 0
+
+        adapted_prompt = prompt_text.replace("주제", main_topic)
+
+        if is_first:
+            system_prompt = _build_first_system_prompt()
+            user_prompt = (
+                f"주제: {main_topic}\n"
+                f"세부 주제: {sub_topics_text}\n"
+                f"참고자료:\n{refs_text}\n\n"
+                f"--- 이 섹션({section_name})의 작성 지시 ---\n\n"
+                f"{adapted_prompt}"
+            )
+        else:
+            system_prompt = _build_continuation_system_prompt()
+            last_part = content_parts[-1]
+            if len(last_part) > 1500:
+                last_part = last_part[-1500:]
+            user_prompt = (
+                f"주제: {main_topic}\n\n"
+                "--- 직전 섹션 (반복 금지, 흐름 참고용) ---\n\n"
+                f"{last_part}\n\n"
+                f"--- 이 섹션({section_name})의 작성 지시 ---\n\n"
+                f"{adapted_prompt}"
+            )
+
+        raw = _call_chatgpt(
+            [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            api_key=api_key,
+            model=model,
+        )
+        seg = extract_json_object(raw)
+
+        if is_first:
+            title = str(seg.get("title", "")).strip()
+            excerpt = str(seg.get("excerpt", "")).strip()
+            seo_keyword = str(seg.get("seo_keyword", main_topic)).strip()
+
+        part = str(seg.get("content_html", "")).strip()
+        if part:
+            content_parts.append(part)
+
+    if not content_parts:
+        raise RuntimeError("No content was generated.")
+
+    if not title:
+        title = main_topic
+    if not excerpt:
+        excerpt = title
+
+    content_html = "\n".join(content_parts)
+    content_html = content_html.replace("<h1 ", "<h2 ").replace("</h1>", "</h2>")
+    title = truncate_with_ellipsis(title, 55)
+    excerpt = truncate_with_ellipsis(excerpt, 155)
+
+    return Article(
+        title=title,
+        excerpt=excerpt,
+        content_html=content_html,
+        seo_keyword=seo_keyword,
+    )
+
+
 def generate_article_with_chatgpt(
     main_topic: str,
     sub_topics: list[str],

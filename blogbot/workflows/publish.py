@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from blogbot.clients.dalle_client import generate_images_with_dalle, load_local_images, save_dalle_image_locally
-from blogbot.clients.openai_client import PROMPT_ROOT, generate_article_with_chatgpt
+from blogbot.clients.openai_client import PROMPT_ROOT, generate_article_auto, generate_article_with_chatgpt
 from blogbot.clients.pixabay_client import download_images_with_pixabay, save_image_locally
 from blogbot.clients.thumbnail_gen import save_title_thumbnail
 from blogbot.clients.wordpress_client import (
@@ -15,7 +15,7 @@ from blogbot.clients.wordpress_client import (
 from blogbot.config import AppConfig
 from blogbot.integrations.knowledge_db import search_knowledge
 from blogbot.integrations.scraper import collect_reference_material
-from blogbot.integrations.search_submitter import submit_post_to_search_sites
+from blogbot.integrations.search_submitter import submit_post_to_search_sites, submit_to_naver_indexnow
 from blogbot.models import Article, PublishResult
 
 logger = logging.getLogger(__name__)
@@ -219,9 +219,123 @@ def publish_post(config: AppConfig) -> PublishResult:
             if not image_message:
                 image_message = f"대표이미지 설정 실패: {exc}"
     public_url, pretty_url = choose_public_url(config.wp_domain, created)
+
+    # 네이버 IndexNow는 항상 실행, Google/Bing은 submit_search 설정에 따라
     search_submit = {"google": "skipped", "bing": "skipped", "naver": "skipped"}
+    search_submit["naver"] = submit_to_naver_indexnow(public_url, domain=config.wp_domain)
     if config.submit_search:
-        search_submit = submit_post_to_search_sites(public_url, sitemap_url=config.sitemap_url)
+        full = submit_post_to_search_sites(public_url, sitemap_url=config.sitemap_url, domain=config.wp_domain)
+        search_submit["google"] = full["google"]
+        search_submit["bing"] = full["bing"]
+
+    return {
+        "post_id": str(created.get("id")),
+        "public_url": public_url,
+        "pretty_url": pretty_url,
+        "edit_url": f"https://{config.wp_domain}/wp-admin/post.php?post={created.get('id')}&action=edit",
+        "title": article.title,
+        "seo_keyword": article.seo_keyword,
+        "image_source": " | ".join(image_sources),
+        "image_url": " | ".join(image_urls),
+        "image_count_uploaded": str(len(image_urls)),
+        "image_status": image_status,
+        "image_message": image_message,
+        "featured_image_status": featured_image_status,
+        "reference_count": str(len(references)),
+        "references": " | ".join(x["url"] for x in references),
+        "search_submit": str(search_submit),
+    }
+
+
+def publish_post_auto(config: AppConfig) -> PublishResult:
+    """자동 발행: 프롬프트 폴더 없이 토픽만으로 글 생성 + 제목 썸네일 이미지 자동 포함."""
+    references = collect_reference_material(config.main_topic, config.sub_topics, max_links=5)
+    if config.knowledge_keyword:
+        db_refs = search_knowledge(config.knowledge_db_path, config.knowledge_keyword, limit=5)
+        merged = references + [{"title": x["title"], "url": x["url"]} for x in db_refs]
+        dedup: list[dict[str, str]] = []
+        seen: set[str] = set()
+        for ref in merged:
+            url = ref["url"].strip()
+            if not url or url in seen:
+                continue
+            seen.add(url)
+            dedup.append(ref)
+        references = dedup[:8]
+
+    article: Article = generate_article_auto(
+        main_topic=config.main_topic,
+        sub_topics=config.sub_topics,
+        references=references,
+        api_key=config.openai_api_key,
+        model=config.model,
+    )
+
+    # 이미지: 제목 썸네일 자동 생성 (무료)
+    image_urls: list[str] = []
+    image_sources: list[str] = []
+    attachment_ids: list[int] = []
+    image_status = "requested"
+    image_message = ""
+
+    label = config.main_topic.strip()
+    jobs: list[tuple[Path, str]] = []
+    for i in range(1, config.image_count + 1):
+        path = save_title_thumbnail(label, index=i)
+        jobs.append((path, f"title-gen:{path.name}"))
+
+    if jobs:
+        urls, sources, ids, last_err = _upload_batch(config, jobs)
+        image_urls.extend(urls)
+        image_sources.extend(sources)
+        attachment_ids.extend(ids)
+        if last_err and not image_message:
+            image_message = last_err
+
+    if image_urls:
+        article.content_html = _inject_images_into_content(article.content_html, article.title, image_urls)
+        image_status = "uploaded"
+    else:
+        image_status = "upload_skipped"
+
+    first_attachment_id = attachment_ids[0] if attachment_ids else None
+
+    created = post_to_wordpress(
+        domain=config.wp_domain,
+        wp_user=config.wp_user,
+        wp_app_password=config.wp_app_password,
+        article=article,
+        status=config.status,
+    )
+    featured_image_status = "not_set" if first_attachment_id is None else "pending"
+    if first_attachment_id is not None:
+        try:
+            set_featured_media(
+                domain=config.wp_domain,
+                wp_user=config.wp_user,
+                wp_app_password=config.wp_app_password,
+                post_id=int(created.get("id")),
+                attachment_id=first_attachment_id,
+            )
+            featured_image_status = "set"
+        except RuntimeError as exc:
+            featured_image_status = "failed"
+            logger.warning(
+                "대표이미지 설정 실패 (post_id=%s, attachment_id=%s): %s",
+                created.get("id"), first_attachment_id, exc,
+            )
+            if not image_message:
+                image_message = f"대표이미지 설정 실패: {exc}"
+
+    public_url, pretty_url = choose_public_url(config.wp_domain, created)
+
+    # 네이버 IndexNow는 항상 실행, Google/Bing은 submit_search 설정에 따라
+    search_submit = {"google": "skipped", "bing": "skipped", "naver": "skipped"}
+    search_submit["naver"] = submit_to_naver_indexnow(public_url, domain=config.wp_domain)
+    if config.submit_search:
+        full = submit_post_to_search_sites(public_url, sitemap_url=config.sitemap_url, domain=config.wp_domain)
+        search_submit["google"] = full["google"]
+        search_submit["bing"] = full["bing"]
 
     return {
         "post_id": str(created.get("id")),

@@ -42,15 +42,17 @@ _IMAGE_SOURCE_OPTIONS = ["local", "title", "dalle", "pixabay"]
 _STATUS_OPTIONS = ["draft", "publish", "private"]
 
 
-def render_inputs_panel(saved: dict[str, Any]) -> InputValues:
+def render_inputs_panel(saved: dict[str, Any], key_prefix: str = "") -> InputValues:
     """좌측 입력 컬럼을 그리고 값을 반환한다."""
+    p = f"{key_prefix}_" if key_prefix else ""
     topic = st.text_input(
         "Topic",
         placeholder="e.g. 5-year-old weekend play ideas",
         value=saved.get("topic", ""),
+        key=f"{p}topic",
     )
-    main_topic = st.text_input("Main topic", value=saved.get("main_topic", ""))
-    sub_topics = st.text_input("Sub topics (comma-separated)", value=saved.get("sub_topics", ""))
+    main_topic = st.text_input("Main topic", value=saved.get("main_topic", ""), key=f"{p}main_topic")
+    sub_topics = st.text_input("Sub topics (comma-separated)", value=saved.get("sub_topics", ""), key=f"{p}sub_topics")
 
     prompt_folders = list_prompt_folders()
     if not prompt_folders:
@@ -58,20 +60,20 @@ def render_inputs_panel(saved: dict[str, Any]) -> InputValues:
     pf_saved = saved.get("prompt_folder", "")
     pf_index = prompt_folders.index(pf_saved) if prompt_folders and pf_saved in prompt_folders else 0
     prompt_folder = (
-        st.selectbox("Prompt folder (글 작성 가이드)", options=prompt_folders, index=pf_index)
+        st.selectbox("Prompt folder (글 작성 가이드)", options=prompt_folders, index=pf_index, key=f"{p}prompt_folder")
         if prompt_folders
         else ""
     )
 
     ic_saved = int(saved.get("image_count", 4))
-    image_count = st.slider("Image count", min_value=1, max_value=5, value=min(max(ic_saved, 1), 5))
+    image_count = st.slider("Image count", min_value=1, max_value=5, value=min(max(ic_saved, 1), 5), key=f"{p}image_count")
 
     status_saved = saved.get("status", "draft")
     status_index = _STATUS_OPTIONS.index(status_saved) if status_saved in _STATUS_OPTIONS else 0
-    status = st.selectbox("Post status", _STATUS_OPTIONS, index=status_index)
-    model = st.text_input("OpenAI model", value=saved.get("model", "gpt-4o-mini"))
+    status = st.selectbox("Post status", _STATUS_OPTIONS, index=status_index, key=f"{p}status")
+    model = st.text_input("OpenAI model", value=saved.get("model", "gpt-4o-mini"), key=f"{p}model")
 
-    with_image = st.checkbox("이미지 포함", value=bool(saved.get("with_image", True)))
+    with_image = st.checkbox("이미지 포함", value=bool(saved.get("with_image", True)), key=f"{p}with_image")
     is_saved = saved.get("image_source", "local")
     is_index = _IMAGE_SOURCE_OPTIONS.index(is_saved) if is_saved in _IMAGE_SOURCE_OPTIONS else 0
     image_source = st.radio(
@@ -80,14 +82,16 @@ def render_inputs_panel(saved: dict[str, Any]) -> InputValues:
         format_func=lambda x: _IMAGE_SOURCE_LABELS[x],
         index=is_index,
         horizontal=True,
+        key=f"{p}image_source",
     )
 
     submit_search = st.checkbox(
-        "Submit sitemap to search engines", value=bool(saved.get("submit_search", False))
+        "Submit sitemap to search engines", value=bool(saved.get("submit_search", False)), key=f"{p}submit_search"
     )
-    sitemap_url = st.text_input("Sitemap URL (optional)", value=saved.get("sitemap_url", ""))
+    sitemap_url = st.text_input("Sitemap URL (optional)", value=saved.get("sitemap_url", ""), key=f"{p}sitemap_url")
 
     openai_api_key, wp_domain, wp_user, wp_app_password, pixabay_api_key = _render_connection_expander(
+        key_prefix=p,
         topic=topic,
         main_topic=main_topic,
         sub_topics=sub_topics,
@@ -121,23 +125,25 @@ def render_inputs_panel(saved: dict[str, Any]) -> InputValues:
     )
 
 
-def _render_connection_expander(**current: Any) -> tuple[str, str, str, str, str]:
+def _render_connection_expander(key_prefix: str = "", **current: Any) -> tuple[str, str, str, str, str]:
+    p = key_prefix
     with st.expander("Connection settings", expanded=False):
         st.caption("API 키·비밀번호는 저장되지 않습니다. 필요 시 환경 변수(.env) 또는 매번 입력을 사용하세요.")
         openai_api_key = st.text_input(
-            "OpenAI API Key", value=os.environ.get("OPENAI_API_KEY", ""), type="password"
+            "OpenAI API Key", value=os.environ.get("OPENAI_API_KEY", ""), type="password", key=f"{p}openai_key"
         )
-        wp_domain = st.text_input("WordPress Domain", value=os.environ.get("WP_DOMAIN", ""))
-        wp_user = st.text_input("WordPress User", value=os.environ.get("WP_USER", ""))
+        wp_domain = st.text_input("WordPress Domain", value=os.environ.get("WP_DOMAIN", ""), key=f"{p}wp_domain")
+        wp_user = st.text_input("WordPress User", value=os.environ.get("WP_USER", ""), key=f"{p}wp_user")
         wp_app_password = st.text_input(
             "WordPress App Password",
             value=os.environ.get("WP_APP_PASSWORD", ""),
             type="password",
+            key=f"{p}wp_app_password",
         )
         pixabay_api_key = st.text_input(
-            "Pixabay API Key", value=os.environ.get("PIXABAY_API_KEY", ""), type="password"
+            "Pixabay API Key", value=os.environ.get("PIXABAY_API_KEY", ""), type="password", key=f"{p}pixabay_key"
         )
-        if st.button("현재 설정 저장 (다음부터 자동 불러옴)"):
+        if st.button("현재 설정 저장 (다음부터 자동 불러옴)", key=f"{p}save_settings"):
             save_ui_settings(current)
             st.success("저장되었습니다. 시크릿(API 키·비밀번호)은 저장되지 않습니다.")
     return openai_api_key, wp_domain, wp_user, wp_app_password, pixabay_api_key

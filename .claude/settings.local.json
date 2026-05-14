@@ -15,7 +15,15 @@
       "Bash(git -C C:/Users/A13176/PJS/project/posting_auto rev-list --left-right --count origin/main...HEAD)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8501)",
       "Bash(cmd.exe *)",
-      "Bash(git check-ignore *)"
+      "Bash(git check-ignore *)",
+      "Bash(find .:*)",
+      "Bash(ls:*)",
+      "WebFetch(domain:logofknowledge.com)",
+      "Bash(env:*)",
+      "WebFetch(domain:www.logofknowledge.com)",
+      "Bash(curl -sIL \"https://logofknowledge.com/ads.txt\")",
+      "Bash(pkill:*)",
+      "Bash(git rm *)"
     ]
   }
 }

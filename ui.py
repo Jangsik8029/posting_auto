@@ -12,6 +12,7 @@ from ui_views.actions import (
     handle_reoptimize,
     handle_schedule_one,
 )
+from ui_views.cafe_pipeline import render_cafe_pipeline
 from ui_views.inputs import render_inputs_panel
 from ui_views.scheduler import get_scheduler
 from ui_views.settings import load_ui_settings
@@ -43,51 +44,70 @@ def _render_bulk_template_download() -> None:
 def main() -> None:
     st.set_page_config(page_title="Blog Publisher", page_icon="📝", layout="wide")
     st.title("Blog Publisher UI")
-    st.caption("Now publish + schedule publish + bulk schedule by Excel")
+
+    # .env 자동 로드
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(Path(__file__).parent / ".env")
+    except ImportError:
+        pass
 
     saved = load_ui_settings()
     scheduler = get_scheduler()
-    left, right = st.columns([2, 1])
 
-    with left:
-        values = render_inputs_panel(saved)
+    tab_manual, tab_cafe = st.tabs(["수동 발행", "카페 크롤링 자동 발행"])
 
-        st.markdown("### Run now")
-        run_now = st.button("Publish now", type="primary")
+    with tab_manual:
+        left, right = st.columns([2, 1])
 
-        st.markdown("### Schedule one")
-        run_date = st.date_input("Date", value=date.today())
-        run_time = st.time_input("Time", value=time(hour=9, minute=0))
-        schedule_one = st.button("Add schedule")
+        with left:
+            values = render_inputs_panel(saved)
 
-        st.markdown("### Schedule bulk (CSV / Excel)")
-        st.caption(
-            "필수: topic, run_at | 선택: main_topic, sub_topics, prompt_folder, "
-            "image_count, status, model, with_image, image_source, submit_search, sitemap_url"
-        )
-        _render_bulk_template_download()
-        uploaded_file = st.file_uploader("CSV 또는 Excel 업로드", type=["csv", "xlsx"])
-        schedule_bulk = st.button("Register bulk schedules")
+            st.markdown("### Run now")
+            run_now = st.button("Publish now", type="primary")
 
-        st.markdown("### 기존 글 네이버 SEO 재적용")
-        st.caption(
-            "워드프레스 글 ID를 입력하면 제목·요약 길이, H1→H2, 이미지 alt를 "
-            "네이버 가이드에 맞게 보정 후 저장합니다."
-        )
-        reopt_post_id = st.number_input("WordPress 글 ID", min_value=1, value=1, step=1, key="reopt_post_id")
-        reoptimize_click = st.button("네이버 SEO 재적용")
+            st.markdown("### Schedule one")
+            run_date = st.date_input("Date", value=date.today())
+            run_time = st.time_input("Time", value=time(hour=9, minute=0))
+            schedule_one = st.button("Add schedule")
 
-    with right:
-        _render_scheduled_jobs(scheduler)
+            st.markdown("### Schedule bulk (CSV / Excel)")
+            st.caption(
+                "필수: topic, run_at | 선택: main_topic, sub_topics, prompt_folder, "
+                "image_count, status, model, with_image, image_source, submit_search, sitemap_url"
+            )
+            _render_bulk_template_download()
+            uploaded_file = st.file_uploader("CSV 또는 Excel 업로드", type=["csv", "xlsx"])
+            schedule_bulk = st.button("Register bulk schedules")
 
-    if run_now:
-        handle_publish_now(values)
-    if schedule_one:
-        handle_schedule_one(values, scheduler, datetime.combine(run_date, run_time))
-    if schedule_bulk:
-        handle_bulk_schedule(values, scheduler, uploaded_file)
-    if reoptimize_click:
-        handle_reoptimize(values, int(reopt_post_id))
+            st.markdown("### 기존 글 네이버 SEO 재적용")
+            st.caption(
+                "워드프레스 글 ID를 입력하면 제목·요약 길이, H1→H2, 이미지 alt를 "
+                "네이버 가이드에 맞게 보정 후 저장합니다."
+            )
+            reopt_post_id = st.number_input("WordPress 글 ID", min_value=1, value=1, step=1, key="reopt_post_id")
+            reoptimize_click = st.button("네이버 SEO 재적용")
+
+        with right:
+            _render_scheduled_jobs(scheduler)
+
+        if run_now:
+            handle_publish_now(values)
+        if schedule_one:
+            handle_schedule_one(values, scheduler, datetime.combine(run_date, run_time))
+        if schedule_bulk:
+            handle_bulk_schedule(values, scheduler, uploaded_file)
+        if reoptimize_click:
+            handle_reoptimize(values, int(reopt_post_id))
+
+    with tab_cafe:
+        left_cafe, right_cafe = st.columns([2, 1])
+        with left_cafe:
+            with st.expander("발행 설정 (프롬프트/이미지/연결)", expanded=False):
+                cafe_values = render_inputs_panel(saved, key_prefix="cafe")
+            render_cafe_pipeline(cafe_values)
+        with right_cafe:
+            _render_scheduled_jobs(scheduler)
 
 
 if __name__ == "__main__":
